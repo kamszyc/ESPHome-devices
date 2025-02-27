@@ -53,6 +53,8 @@ sensor:
     pressure:
       id: bmp280_pressure
       name: "Pressure"
+      on_value:
+       - component.update: sea_level_pressure
     temperature:
       id: bmp280_temperature
       oversampling: 16x
@@ -76,8 +78,6 @@ number:
     entity_id: input_number.altitude
     on_value:
       - component.update: bmp280
-      - delay: 5s
-      - component.update: sea_level_pressure
 
 text_sensor:
   - platform: version

@@ -283,6 +283,7 @@ binary_sensor:
         input: true
         pullup: true
     name: "Joystick OK"
+    internal: True
     filters:
       - lambda: |-
           if (id(laundry_alert_displayed)) {

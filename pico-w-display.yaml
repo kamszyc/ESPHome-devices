@@ -21,6 +21,10 @@ logger:
 api:
   encryption:
     key: !secret api_key
+  actions:
+    - action: laundry_alert
+      then:
+        - script.execute: show_alert
 
 ota:
   - platform: esphome
@@ -359,13 +363,6 @@ binary_sensor:
     on_state: 
       then:
       - component.update: my_display
-    
-  - platform: homeassistant
-    entity_id: input_boolean.laundry_alert_on_display
-    id: laundry_alert
-    on_press: 
-      then:
-      - script.execute: show_alert
 
   - platform: homeassistant
     id: lamp

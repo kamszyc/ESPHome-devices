@@ -1,0 +1,85 @@
+esphome:
+  name: esp-meteo-sensor
+  friendly_name: ESP Meteo Sensor
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret api_key
+
+# Allow Over-The-Air updates
+ota:
+- platform: esphome
+  password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "ESP Meteo Station"
+    password: !secret fallback_hotspot_password
+
+captive_portal:
+
+i2c:
+  sda: GPIO8
+  scl: GPIO9
+  scan: true
+  id: bus_a
+
+sensor:
+  - platform: dht
+    id: dht22
+    pin: GPIO4
+    temperature:
+      name: "Temperature"
+    humidity:
+      name: "Humidity"
+    update_interval: 1min
+
+  - platform: bmp280_i2c
+    id: bmp280
+    pressure:
+      id: bmp280_pressure
+      name: "Pressure"
+    temperature:
+      id: bmp280_temperature
+      oversampling: 16x
+    address: 0x76
+    update_interval: 1min
+
+  - platform: template
+    name: "Equivalent sea level pressure"
+    id: sea_level_pressure
+    lambda: |-
+      return id(bmp280_pressure).state / powf(1 - ((0.0065 * id(altitude).state) /
+        (id(bmp280_temperature).state + (0.0065 * id(altitude).state) + 273.15)), 5.257); // in hPa
+    update_interval: 1min
+    icon: "mdi:gauge"
+    unit_of_measurement: 'hPa'
+
+number:
+  - platform: homeassistant
+    name: "Altitude"
+    id: altitude
+    entity_id: input_number.altitude
+
+text_sensor:
+  - platform: version
+    name: "Version"
+    icon: mdi:cube-outline
+
+binary_sensor:
+  - platform: status
+    name: "Status"
+    device_class: connectivity

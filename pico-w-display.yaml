@@ -415,7 +415,7 @@ font:
 sensor:
   - platform: homeassistant
     id: current_temperature
-    entity_id: sensor.xiaomi_lywsd03mmc_temperatura
+    entity_id: sensor.esp_meteo_sensor_temperature
     on_value: 
       then:
       - if:
@@ -427,7 +427,7 @@ sensor:
 
   - platform: homeassistant
     id: current_humidity
-    entity_id: sensor.xiaomi_lywsd03mmc_wilgotnosc
+    entity_id: sensor.esp_meteo_sensor_humidity
     on_value: 
       then:
       - if:
@@ -439,7 +439,7 @@ sensor:
 
   - platform: homeassistant
     id: current_pressure
-    entity_id: sensor.esp32_pressure_sensor_equivalent_sea_level_pressure
+    entity_id: sensor.esp_meteo_sensor_equivalent_sea_level_pressure
     on_value: 
       then:
       - if:

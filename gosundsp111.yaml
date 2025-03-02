@@ -37,7 +37,6 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Gosund-Sp111 Fallback Hotspot"
     password: !secret fallback_hotspot_password
 
 captive_portal:

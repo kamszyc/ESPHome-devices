@@ -41,7 +41,6 @@ wifi:
     
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Pico W Fallback Hotspot"
     password: !secret fallback_hotspot_password
 
 globals:

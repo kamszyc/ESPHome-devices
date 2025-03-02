@@ -1,0 +1,36 @@
+name: CI
+
+on: push
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Building ${{ matrix.file }} / ${{ matrix.esphome-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        file:
+          - esp-meteo-sensor
+          - gosundsp111
+          - pico-w-display
+
+        esphome-version:
+          - stable
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4.1.7
+      - name: ESPHome ${{ matrix.esphome-version }}
+        uses: esphome/build-action@v6.0.0
+        with:
+          yaml-file: ${{ matrix.file }}.yaml
+          version: ${{ matrix.esphome-version }}
+      - name: ESPHome ${{ matrix.esphome-version }} Factory
+        uses: esphome/build-action@v6.0.0
+        with:
+          yaml-file: ${{ matrix.file }}.factory.yaml
+          version: ${{ matrix.esphome-version }}

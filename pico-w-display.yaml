@@ -4,12 +4,6 @@ esphome:
   includes:
     - pico-w-display.h
     - <algorithm>
-  on_boot:
-    - priority: -100.0
-      then:
-        - light.control:
-            id: backlight
-            brightness: 0.7
 
 rp2040:
   board: rpipicow
@@ -170,6 +164,7 @@ light:
   - platform: monochromatic
     output: gpio13
     id: backlight
+    restore_mode: RESTORE_AND_OFF
 
 spi:
   clk_pin: GPIO10

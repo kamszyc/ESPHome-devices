@@ -1,6 +1,19 @@
 esphome:
   name: esp-meteo-sensor
   friendly_name: ESP Meteo Sensor
+  on_boot:
+    - priority: -200
+      then:
+        - delay: 1s
+        - logger.log: "Checking sleep"
+        - lambda: |-
+            if(id(remote_defeat).state) {
+              ESP_LOGD("main", "Remote prevent sleep");
+              id(deep_sleep_1).prevent_deep_sleep();
+            } else {
+              ESP_LOGD("main", "Remote allow sleep");
+              id(deep_sleep_1).allow_deep_sleep();
+            }
 
 esp32:
   board: esp32-c3-devkitm-1
@@ -44,41 +57,65 @@ sensor:
       name: "Temperature"
     humidity:
       name: "Humidity"
-    update_interval: 1min
+    update_interval: 5s
 
   - platform: bmp280_i2c
     id: bmp280
     pressure:
       id: bmp280_pressure
       name: "Pressure"
+      on_value:
+        - component.update: sea_level_pressure
     temperature:
       id: bmp280_temperature
       oversampling: 16x
     address: 0x76
-    update_interval: 1min
+    update_interval: never
 
   - platform: template
-    name: "Equivalent sea level pressure"
+    name: "Sea level pressure"
     id: sea_level_pressure
     lambda: |-
       return id(bmp280_pressure).state / powf(1 - ((0.0065 * id(altitude).state) /
         (id(bmp280_temperature).state + (0.0065 * id(altitude).state) + 273.15)), 5.257); // in hPa
-    update_interval: 1min
+    update_interval: never
     icon: "mdi:gauge"
     unit_of_measurement: 'hPa'
+    state_class: measurement
 
 number:
   - platform: homeassistant
     name: "Altitude"
     id: altitude
     entity_id: input_number.altitude
+    on_value:
+      - component.update: bmp280
 
 text_sensor:
   - platform: version
     name: "Version"
     icon: mdi:cube-outline
 
+deep_sleep:
+  run_duration: 10s
+  sleep_duration: 290s
+  id: deep_sleep_1
+
 binary_sensor:
   - platform: status
     name: "Status"
     device_class: connectivity
+
+  - platform: homeassistant
+    name: "Remote Defeat Sleep"
+    internal: True
+    id: "remote_defeat"
+    entity_id: input_boolean.defeat_sleep
+    on_press:
+      then:
+        - logger.log: "Remote prevent sleep"
+        - deep_sleep.prevent: deep_sleep_1
+    on_release:
+      then:
+        - logger.log: "Remote allow sleep"
+        - deep_sleep.allow: deep_sleep_1

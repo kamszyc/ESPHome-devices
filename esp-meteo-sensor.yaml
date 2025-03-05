@@ -2,9 +2,9 @@ esphome:
   name: esp-meteo-sensor
   friendly_name: ESP Meteo Sensor
   on_boot:
-    - priority: -200
+    - priority: -100
       then:
-        - delay: 1s
+        - delay: 2s
         - logger.log: "Checking sleep"
         - lambda: |-
             if(id(remote_defeat).state) {
@@ -12,7 +12,6 @@ esphome:
               id(deep_sleep_1).prevent_deep_sleep();
             } else {
               ESP_LOGD("main", "Remote allow sleep");
-              id(deep_sleep_1).allow_deep_sleep();
             }
 
 esp32:
@@ -79,8 +78,8 @@ sensor:
       return id(bmp280_pressure).state / powf(1 - ((0.0065 * id(altitude).state) /
         (id(bmp280_temperature).state + (0.0065 * id(altitude).state) + 273.15)), 5.257); // in hPa
     update_interval: never
-    icon: "mdi:gauge"
     unit_of_measurement: 'hPa'
+    device_class: pressure
     state_class: measurement
 
 number:

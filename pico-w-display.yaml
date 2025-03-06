@@ -433,7 +433,7 @@ sensor:
 
   - platform: homeassistant
     id: current_pressure
-    entity_id: sensor.esp_meteo_sensor_equivalent_sea_level_pressure
+    entity_id: sensor.esp_meteo_sensor_sea_level_pressure
     on_value: 
       then:
       - if:

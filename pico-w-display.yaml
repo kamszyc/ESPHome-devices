@@ -37,6 +37,21 @@ wifi:
   ap:
     password: !secret fallback_hotspot_password
 
+event:
+  - id: yeelight_control
+    name: "Yeelight control"
+    platform: template
+    event_types:
+      - yeelight_dim
+      - yeelight_brighten
+
+  - id: lamp_control
+    name: "Lamp control"
+    platform: template
+    event_types:
+      - lamp_dim
+      - lamp_brighten
+
 globals:
   - id: laundry_alert_displayed
     type: bool
@@ -86,8 +101,9 @@ script:
           - light.is_on: backlight
           then:
             - script.execute: backlight_short
-            - homeassistant.event:
-                event: esphome.yeelight_dim
+            - event.trigger:
+                id: yeelight_control
+                event_type: yeelight_dim
           else:
             - if:
                 all:
@@ -95,8 +111,9 @@ script:
                 - light.is_on: backlight
                 then:
                   - script.execute: backlight_short
-                  - homeassistant.event:
-                      event: esphome.lamp_dim
+                  - event.trigger:
+                      id: lamp_control
+                      event_type: lamp_dim
                 else:
                   - if:
                       all:
@@ -124,8 +141,9 @@ script:
           - light.is_on: backlight
           then:
             - script.execute: backlight_short
-            - homeassistant.event:
-                event: esphome.yeelight_brighten
+            - event.trigger:
+                id: yeelight_control
+                event_type: yeelight_brighten
           else:
             - if:
                 all:
@@ -133,8 +151,9 @@ script:
                 - light.is_on: backlight
                 then:
                   - script.execute: backlight_short
-                  - homeassistant.event:
-                      event: esphome.lamp_brighten
+                  - event.trigger:
+                      id: lamp_control
+                      event_type: lamp_brighten
                 else:
                   - if:
                       all:

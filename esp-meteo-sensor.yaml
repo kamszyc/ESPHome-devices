@@ -54,6 +54,7 @@ sensor:
     pin: GPIO4
     temperature:
       name: "Temperature"
+      id: dht_temperature
     humidity:
       name: "Humidity"
     update_interval: 5s
@@ -76,7 +77,7 @@ sensor:
     id: sea_level_pressure
     lambda: |-
       return id(bmp280_pressure).state / powf(1 - ((0.0065 * id(altitude).state) /
-        (id(bmp280_temperature).state + (0.0065 * id(altitude).state) + 273.15)), 5.257); // in hPa
+        (id(dht_temperature).state + (0.0065 * id(altitude).state) + 273.15)), 5.257); // in hPa
     update_interval: never
     unit_of_measurement: 'hPa'
     device_class: pressure

@@ -41,15 +41,27 @@ wifi:
 
 captive_portal:
 
-# see: https://esphome.io/components/time.html
+wireguard:
+  address: 10.5.0.3
+  private_key: !secret gosund_wireguard_private_key
+  peer_endpoint: !secret gosund_wireguard_peer_endpoint
+  peer_port: !secret gosund_wireguard_peer_port
+  peer_public_key: !secret gosund_wireguard_peer_public_key
+  netmask: 255.255.255.0
+  peer_allowed_ips:
+    - 10.5.0.0/24
+
 time:
-  - platform: homeassistant
-    id: homeassistant_time
+  - platform: sntp
+    id: sntp_time
+    timezone: Europe/Warsaw
 
 # Enable Web server
-# web_server:
-#  port: 80
-#  version: 3
+web_server:
+ port: 80
+ version: 3
+ log: False
+ ota: False
 
 text_sensor:
   - platform: version

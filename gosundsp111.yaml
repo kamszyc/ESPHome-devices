@@ -58,10 +58,10 @@ time:
 
 # Enable Web server
 web_server:
- port: 80
- version: 3
- log: False
- ota: False
+  port: 80
+  version: 3
+  log: False
+  ota: False
 
 text_sensor:
   - platform: version

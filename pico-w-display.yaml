@@ -153,6 +153,9 @@ display:
                           "Temperatura", "%.1f°C", id(current_temperature).state,
                           "Wilgotnosc", "%.1f%%", id(current_humidity).state,
                           "Cisnienie", "%.1fhPa", id(current_pressure).state);
+    on_page_change: 
+      then:
+        - component.update: my_display
 
 binary_sensor:
   - platform: gpio
@@ -286,7 +289,6 @@ binary_sensor:
       then: 
       - script.execute: backlight_short
       - display.page.show_previous: my_display
-      - component.update: my_display
 
   - platform: gpio
     pin:
@@ -301,7 +303,6 @@ binary_sensor:
       then: 
       - script.execute: backlight_short
       - display.page.show_next: my_display
-      - component.update: my_display
 
   - platform: status
     name: "Node Status"

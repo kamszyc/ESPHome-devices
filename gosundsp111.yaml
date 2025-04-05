@@ -83,6 +83,12 @@ binary_sensor:
     on_press:
       - switch.toggle: button_switch
 
+  - platform: wireguard
+    status:
+      name: 'WireGuard Status'
+      device_class: connectivity
+      entity_category: "diagnostic"
+
 sensor:
   - platform: total_daily_energy
     name: "Todays Usage"

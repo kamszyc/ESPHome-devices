@@ -59,6 +59,13 @@ event:
       - yeelight_ambilight_dim
       - yeelight_ambilight_brighten
 
+  - id: wled_control
+    name: "WLED control"
+    platform: template
+    event_types:
+      - wled_dim
+      - wled_brighten
+
 globals:
   - id: laundry_alert_displayed
     type: bool
@@ -143,15 +150,12 @@ display:
       - id: page_yeelight_ambilight
         lambda: |- 
           drawBrightnessPage(it, id(laundry_alert_displayed), "Ambilight", id(yeelight_ambilight).state, id(yeelight_ambilight_brightness).state);
+      - id: page_wled
+        lambda: |- 
+          drawBrightnessPage(it, id(laundry_alert_displayed), "WLED", id(wled).state, id(wled_brightness).state);
       - id: page_display_brightness
         lambda: |- 
           drawBrightnessPage(it, id(laundry_alert_displayed), "Jasnosc tutaj", id(backlight).remote_values.is_on(), id(backlight).remote_values.get_brightness() * 255);
-      - id: page_sensors
-        lambda: |-
-          drawSensorsPage(it, id(laundry_alert_displayed),
-                          "Temperatura", "%.1f°C", id(current_temperature).state,
-                          "Wilgotnosc", "%.1f%%", id(current_humidity).state,
-                          "Cisnienie", "%.1fhPa", id(current_pressure).state);
     on_page_change: 
       then:
         - component.update: my_display
@@ -322,6 +326,10 @@ binary_sensor:
     id: yeelight_ambilight
     entity_id: light.yeelight_lamp15_0x1e4bf3ad_ambilight
 
+  - platform: homeassistant
+    id: wled
+    entity_id: light.wled
+
 color:
   - id: my_red
     red: 100%
@@ -364,42 +372,6 @@ font:
 
 sensor:
   - platform: homeassistant
-    id: current_temperature
-    entity_id: sensor.esp_meteo_sensor_temperature
-    on_value: 
-      then:
-      - if:
-          all:
-          - display.is_displaying_page: page_sensors
-          - light.is_on: backlight
-          then:
-            - component.update: my_display
-
-  - platform: homeassistant
-    id: current_humidity
-    entity_id: sensor.esp_meteo_sensor_humidity
-    on_value: 
-      then:
-      - if:
-          all:
-          - display.is_displaying_page: page_sensors
-          - light.is_on: backlight
-          then:
-            - component.update: my_display
-
-  - platform: homeassistant
-    id: current_pressure
-    entity_id: sensor.esp_meteo_sensor_sea_level_pressure
-    on_value: 
-      then:
-      - if:
-          all:
-          - display.is_displaying_page: page_sensors
-          - light.is_on: backlight
-          then:
-            - component.update: my_display
-
-  - platform: homeassistant
     id: yeelight_brightness
     entity_id: light.yeelight_lamp15_0x1e4bf3ad
     attribute: brightness
@@ -434,6 +406,19 @@ sensor:
       - if:
           all:
           - display.is_displaying_page: page_yeelight_ambilight
+          - light.is_on: backlight
+          then:
+            - component.update: my_display
+
+  - platform: homeassistant
+    id: wled_brightness
+    entity_id: light.wled
+    attribute: brightness
+    on_value: 
+      then:
+      - if:
+          all:
+          - display.is_displaying_page: page_wled
           - light.is_on: backlight
           then:
             - component.update: my_display

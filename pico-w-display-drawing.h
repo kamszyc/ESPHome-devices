@@ -46,11 +46,6 @@ void drawBrightnessPageInternal(Display& it, const char* sensorName, const char*
     drawPlusMinus(it, isMin, isMax);
 }
 
-void drawSensorValue(Display& it, const char* sensorName, const char* format, float state, int position) {
-    it.print((240 / 2), (140 / 3 + 14) * position + 4, font_24, my_gray, TextAlign::CENTER, sensorName);
-    it.printf((240 / 2), (140 / 3 + 14) * position + 34, font_30, my_gray, COLOR_OFF, TextAlign::CENTER, format, state);
-}
-
 void drawBrightnessPage(Display& it, bool laundryAlertDisplayed, const char* sensorName, bool enabled, float state) {
     drawCommon(it, laundryAlertDisplayed);
     if (laundryAlertDisplayed) {
@@ -62,20 +57,5 @@ void drawBrightnessPage(Display& it, bool laundryAlertDisplayed, const char* sen
     else {
         int brightness = (state / 255.0)*100;
         drawBrightnessPageInternal(it, sensorName, "%.0f%%", brightness, false, brightness >= 99);
-    }
-}
-
-void drawSensorsPage(Display& it, bool laundryAlertDisplayed,
-    const char* sensorName1, const char* format1, float state1,
-    const char* sensorName2, const char* format2, float state2,
-    const char* sensorName3, const char* format3, float state3) {
-    drawCommon(it, laundryAlertDisplayed);
-    if (laundryAlertDisplayed) {
-        drawLaundryAlert(it);
-    }
-    else {
-        drawSensorValue(it, sensorName1, format1, state1, 1);
-        drawSensorValue(it, sensorName2, format2, state2, 2);
-        drawSensorValue(it, sensorName3, format3, state3, 3);
     }
 }

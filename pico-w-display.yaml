@@ -2,7 +2,8 @@ esphome:
   name: pico-w-display
   friendly_name: Pico W display
   includes:
-    - pico-w-display.h
+    - pico-w-display-drawing.h
+    - pico-w-display-joystick.h
     - <algorithm>
 
 rp2040:
@@ -93,86 +94,6 @@ script:
       - component.update: my_display
       - light.turn_off: backlight
 
-  - id: joystick_down
-    then:
-      - if:
-          all:
-          - display.is_displaying_page: page_yeelight
-          - light.is_on: backlight
-          then:
-            - script.execute: backlight_short
-            - event.trigger:
-                id: yeelight_control
-                event_type: yeelight_dim
-          else:
-            - if:
-                all:
-                - display.is_displaying_page: page_lamp
-                - light.is_on: backlight
-                then:
-                  - script.execute: backlight_short
-                  - event.trigger:
-                      id: lamp_control
-                      event_type: lamp_dim
-                else:
-                  - if:
-                      all:
-                      - display.is_displaying_page: page_display_brightness
-                      - light.is_on: backlight
-                      then:
-                        - script.execute: backlight_short
-                        - light.control:
-                            id: backlight
-                            brightness: !lambda |- 
-                              return std::max(0.1, id(backlight).current_values.get_brightness() - 0.1);
-                        - component.update: my_display
-                      else:
-                        - if:
-                            condition:
-                              light.is_off: backlight
-                            then:
-                              - script.execute: backlight_short
-
-  - id: joystick_up
-    then:
-      - if:
-          all:
-          - display.is_displaying_page: page_yeelight
-          - light.is_on: backlight
-          then:
-            - script.execute: backlight_short
-            - event.trigger:
-                id: yeelight_control
-                event_type: yeelight_brighten
-          else:
-            - if:
-                all:
-                - display.is_displaying_page: page_lamp
-                - light.is_on: backlight
-                then:
-                  - script.execute: backlight_short
-                  - event.trigger:
-                      id: lamp_control
-                      event_type: lamp_brighten
-                else:
-                  - if:
-                      all:
-                      - display.is_displaying_page: page_display_brightness
-                      - light.is_on: backlight
-                      then:
-                        - script.execute: backlight_short
-                        - light.control:
-                            id: backlight
-                            brightness: !lambda |- 
-                              return std::min(1.0, id(backlight).current_values.get_brightness() + 0.1);
-                        - component.update: my_display
-                      else:
-                        - if:
-                            condition:
-                              light.is_off: backlight
-                            then:
-                              - script.execute: backlight_short
-  
 # Allow dimmable control of the backlight
 output:
   - platform: rp2040_pwm
@@ -325,7 +246,8 @@ binary_sensor:
     internal: True
     on_click: 
       then:
-        - script.execute: joystick_up
+        - lambda: |-
+            handle_joystick(UP);
       
   - platform: gpio
     pin:
@@ -338,7 +260,8 @@ binary_sensor:
     internal: True
     on_click: 
       then:
-        - script.execute: joystick_down
+        - lambda: |-
+            handle_joystick(DOWN);
 
   - platform: gpio
     pin:

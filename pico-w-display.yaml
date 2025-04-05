@@ -53,6 +53,13 @@ event:
       - lamp_dim
       - lamp_brighten
 
+  - id: yeelight_ambilight_control
+    name: "Yeelight ambilight control"
+    platform: template
+    event_types:
+      - yeelight_ambilight_dim
+      - yeelight_ambilight_brighten
+
 globals:
   - id: laundry_alert_displayed
     type: bool
@@ -134,6 +141,9 @@ display:
       - id: page_lamp
         lambda: |- 
           drawBrightnessPage(it, id(laundry_alert_displayed), "Lampka", id(lamp).state, id(lamp_brightness).state);
+      - id: page_yeelight_ambilight
+        lambda: |- 
+          drawBrightnessPage(it, id(laundry_alert_displayed), "Ambilight", id(yeelight_ambilight).state, id(yeelight_ambilight_brightness).state);
       - id: page_display_brightness
         lambda: |- 
           drawBrightnessPage(it, id(laundry_alert_displayed), "Jasnosc tutaj", id(backlight).remote_values.is_on(), id(backlight).remote_values.get_brightness() * 255);
@@ -308,6 +318,10 @@ binary_sensor:
     id: yeelight
     entity_id: light.yeelight_lamp15_0x1e4bf3ad
 
+  - platform: homeassistant
+    id: yeelight_ambilight
+    entity_id: light.yeelight_lamp15_0x1e4bf3ad_ambilight
+
 color:
   - id: my_red
     red: 100%
@@ -407,6 +421,19 @@ sensor:
       - if:
           all:
           - display.is_displaying_page: page_lamp
+          - light.is_on: backlight
+          then:
+            - component.update: my_display
+
+  - platform: homeassistant
+    id: yeelight_ambilight_brightness
+    entity_id: light.yeelight_lamp15_0x1e4bf3ad_ambilight
+    attribute: brightness
+    on_value: 
+      then:
+      - if:
+          all:
+          - display.is_displaying_page: page_yeelight_ambilight
           - light.is_on: backlight
           then:
             - component.update: my_display

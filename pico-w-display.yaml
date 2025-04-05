@@ -4,7 +4,6 @@ esphome:
   includes:
     - pico-w-display-drawing.h
     - pico-w-display-joystick.h
-    - <algorithm>
 
 rp2040:
   board: rpipicow

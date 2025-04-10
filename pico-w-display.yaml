@@ -107,6 +107,28 @@ script:
       - component.update: my_display
       - light.turn_off: backlight
 
+  - id: joystick_up_script
+    mode: restart
+    then:
+      - while:
+          condition:
+            binary_sensor.is_on: joystick_up
+          then:
+            - lambda: |-
+                handle_joystick_updown(UP);
+            - delay: 500ms
+                
+  - id: joystick_down_script
+    mode: restart
+    then:
+      - while:
+          condition:
+            binary_sensor.is_on: joystick_down
+          then:
+            - lambda: |-
+                handle_joystick_updown(DOWN);
+            - delay: 500ms
+
 # Allow dimmable control of the backlight
 output:
   - platform: rp2040_pwm
@@ -269,11 +291,12 @@ binary_sensor:
         input: true
         pullup: true
     name: "Joystick Up"
+    id: joystick_up
     internal: True
-    on_click: 
-      then:
-        - lambda: |-
-            handle_joystick(UP);
+    on_press:
+      - script.execute: joystick_up_script
+    on_release:
+      - script.stop: joystick_up_script
       
   - platform: gpio
     pin:
@@ -283,11 +306,12 @@ binary_sensor:
         input: true
         pullup: true
     name: "Joystick Down"
+    id: joystick_down
     internal: True
-    on_click: 
-      then:
-        - lambda: |-
-            handle_joystick(DOWN);
+    on_press:
+      - script.execute: joystick_down_script
+    on_release:
+      - script.stop: joystick_down_script
 
   - platform: gpio
     pin:

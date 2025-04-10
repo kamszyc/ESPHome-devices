@@ -122,6 +122,11 @@ light:
 spi:
   clk_pin: GPIO10
   mosi_pin: GPIO11
+  
+button:
+  - platform: restart
+    name: "Restart"
+    id: restart_button
 
 display:
   - platform: ili9xxx
@@ -250,6 +255,11 @@ binary_sensor:
       then:
         - script.execute: backlight_short
         - component.update: my_display
+    on_multi_click: 
+    - timing:
+      - ON for at least 5s
+      then:
+      - button.press: restart_button
 
   - platform: gpio
     pin:

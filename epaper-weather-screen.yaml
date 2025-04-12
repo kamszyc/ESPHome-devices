@@ -185,109 +185,109 @@ button:
 
 
 image:
-  - file: "icon/01d.png"
+  - file: "epaper-weather-screen/icon/01d.png"
     id: img01d
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/01n.png"
+  - file: "epaper-weather-screen/icon/01n.png"
     id: img01n
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/02d.png"
+  - file: "epaper-weather-screen/icon/02d.png"
     id: img02d
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/02n.png"
+  - file: "epaper-weather-screen/icon/02n.png"
     id: img02n
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/03d.png"
+  - file: "epaper-weather-screen/icon/03d.png"
     id: img03d
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/03n.png"
+  - file: "epaper-weather-screen/icon/03n.png"
     id: img03n
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/04d.png"
+  - file: "epaper-weather-screen/icon/04d.png"
     id: img04d
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/04n.png"
+  - file: "epaper-weather-screen/icon/04n.png"
     id: img04n
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/09d.png"
+  - file: "epaper-weather-screen/icon/09d.png"
     id: img09d
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/09n.png"
+  - file: "epaper-weather-screen/icon/09n.png"
     id: img09n
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/10d.png"
+  - file: "epaper-weather-screen/icon/10d.png"
     id: img10d
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/10n.png"
+  - file: "epaper-weather-screen/icon/10n.png"
     id: img10n
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/11d.png"
+  - file: "epaper-weather-screen/icon/11d.png"
     id: img11d
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/11n.png"
+  - file: "epaper-weather-screen/icon/11n.png"
     id: img11n
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/13d.png"
+  - file: "epaper-weather-screen/icon/13d.png"
     id: img13d
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/13n.png"
+  - file: "epaper-weather-screen/icon/13n.png"
     id: img13n
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/50d.png"
+  - file: "epaper-weather-screen/icon/50d.png"
     id: img50d
     resize: 128x128
     type: BINARY
     invert_alpha: true
 
-  - file: "icon/50n.png"
+  - file: "epaper-weather-screen/icon/50n.png"
     id: img50n
     resize: 128x128
     type: BINARY

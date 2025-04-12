@@ -2,8 +2,8 @@ esphome:
   name: pico-w-display
   friendly_name: Pico W display
   includes:
-    - pico-w-display-drawing.h
-    - pico-w-display-joystick.h
+    - pico-w-display/drawing.h
+    - pico-w-display/joystick.h
 
 rp2040:
   board: rpipicow
@@ -391,16 +391,16 @@ color:
     blue: 80%
 
 font:
-  - file: "Helvetica-Bold.ttf"
+  - file: "pico-w-display/Helvetica-Bold.ttf"
     id: font_bold_48
     size: 48
-  - file: "Helvetica.ttf"
+  - file: "pico-w-display/Helvetica.ttf"
     id: font_48
     size: 48
-  - file: "Helvetica.ttf"
+  - file: "pico-w-display/Helvetica.ttf"
     id: font_30
     size: 30
-  - file: "Helvetica.ttf"
+  - file: "pico-w-display/Helvetica.ttf"
     id: font_24
     size: 24
 

@@ -1,0 +1,294 @@
+esphome:
+  name: "epaper-weather-screen"
+  friendly_name: E-paper Weather Screen
+  min_version: 2024.11.0
+  name_add_mac_suffix: false
+  on_boot:
+    priority: -100
+    then:
+      - script.execute: http_req
+      
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret api_key
+
+# Allow Over-The-Air updates
+ota:
+- platform: esphome
+  password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    password: !secret fallback_hotspot_password
+
+captive_portal:
+
+spi:
+  mosi_pin: GPIO6 # aka SDA
+  clk_pin: GPIO7  #aka SCL
+
+font:
+  - file: "gfonts://Roboto"
+    id: font24
+    size: 24
+  - file: "gfonts://Roboto"
+    id: font48
+    size: 48
+
+globals:
+  - id: current_image
+    type: std::string
+    initial_value: '"01d"'
+
+  - id: current_unix_timestamp
+    type: int
+
+display:
+  - platform: waveshare_epaper
+    id: my_display
+    model: 2.90inV2
+    cs_pin: GPIO4
+    dc_pin: GPIO3
+    reset_pin: GPIO1
+    busy_pin: GPIO0
+    rotation: 270
+    full_update_every: 1
+    update_interval: never
+    lambda: |-
+      std::map<std::string, esphome::image::Image*> weather_icon_map
+      {
+        {"01d", id(img01d)},
+        {"01n", id(img01n)},
+        {"02d", id(img02d)},
+        {"02n", id(img02n)},
+        {"03d", id(img03d)},
+        {"03n", id(img03n)},
+        {"04d", id(img04d)},
+        {"04n", id(img04n)},
+        {"09d", id(img09d)},
+        {"09n", id(img09n)},
+        {"10d", id(img10d)},
+        {"10n", id(img10n)},
+        {"11d", id(img11d)},
+        {"11n", id(img11n)},
+        {"13d", id(img13d)},
+        {"13n", id(img13n)},
+        {"50d", id(img50d)},
+        {"50n", id(img50n)},
+      };
+
+      it.image(168, 0, weather_icon_map[id(current_image)]);
+
+      time_t rawtime = (time_t) id(current_unix_timestamp);
+      struct tm * timeinfo = localtime(&rawtime);
+
+      std::map<int, const char*> month_map_pl
+      {
+          {1, "Sty"},
+          {2, "Lut"},
+          {3, "Mar"},
+          {4, "Kwi"},
+          {5, "Maj"},
+          {6, "Cze"},
+          {7, "Lip"},
+          {8, "Sie"},
+          {9, "Wrz"},
+          {10, "Paz"},
+          {11, "Lis"},
+          {12, "Gru"}
+      };
+      it.printf(0, 0, id(font48), "%.1f°C", id(temperature).state);
+      it.printf(0, 52, id(font24), "%02d %s %d", timeinfo->tm_mday, month_map_pl[timeinfo->tm_mon + 1], timeinfo->tm_year + 1900);
+      it.printf(0, 76, id(font24), "Min: %.1f°C", id(temperature_min).state);
+      it.printf(0, 100, id(font24), "Max: %.1f°C", id(temperature_max).state);
+
+script:
+  - id: http_req
+    then:
+    - http_request.get:
+          url: !secret openweathermap_url
+          capture_response: true
+          max_response_buffer_size: 8192
+          on_response:
+            then:
+              - logger.log:
+                  format: "Response status: %d, Duration: %u ms"
+                  args:
+                    - response->status_code
+                    - response->duration_ms
+              - lambda: |-
+                  json::parse_json(body, [](JsonObject root) -> bool {
+                      JsonObject current = root["current"];
+                      JsonObject daily = root["daily"][0];
+                      JsonObject dailyTemp = daily["temp"];
+
+                      id(temperature).publish_state(current["temp"]);
+                      id(temperature_min).publish_state(dailyTemp["min"]);
+                      id(temperature_max).publish_state(dailyTemp["max"]);
+
+                      id(current_image) = std::string(daily["weather"][0]["icon"]);
+                      id(current_unix_timestamp) = daily["dt"];
+                      id(my_display).update();
+                      return true;
+                  });
+          on_error:
+            then:
+              - logger.log: "Request failed!"
+
+http_request:
+
+interval:
+  - interval: 1h
+    then:
+      - script.execute: http_req
+
+sensor:
+  - platform: template
+    name: "Temperature"
+    unit_of_measurement: "°C"
+    accuracy_decimals: 1
+    id: temperature
+    internal: True
+
+  - platform: template
+    name: "Temperature min"
+    unit_of_measurement: "°C"
+    accuracy_decimals: 1
+    id: temperature_min
+    internal: True
+
+  - platform: template
+    name: "Temperature max"
+    unit_of_measurement: "°C"
+    accuracy_decimals: 1
+    id: temperature_max
+    internal: True
+
+button:
+  - platform: restart
+    name: "Restart"
+    id: restart_button
+
+
+image:
+  - file: "icon/01d.png"
+    id: img01d
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/01n.png"
+    id: img01n
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/02d.png"
+    id: img02d
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/02n.png"
+    id: img02n
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/03d.png"
+    id: img03d
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/03n.png"
+    id: img03n
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/04d.png"
+    id: img04d
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/04n.png"
+    id: img04n
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/09d.png"
+    id: img09d
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/09n.png"
+    id: img09n
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/10d.png"
+    id: img10d
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/10n.png"
+    id: img10n
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/11d.png"
+    id: img11d
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/11n.png"
+    id: img11n
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/13d.png"
+    id: img13d
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/13n.png"
+    id: img13n
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/50d.png"
+    id: img50d
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true
+
+  - file: "icon/50n.png"
+    id: img50n
+    resize: 128x128
+    type: BINARY
+    invert_alpha: true

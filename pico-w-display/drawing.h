@@ -1,4 +1,4 @@
-void drawCommon(Display& it, bool alert = false) {
+void drawCommon(Display& it) {
     it.filled_rectangle(0, 0, it.get_width(), 40, my_blue);
 
     it.print(10, 10, font_24, my_light_gray, TextAlign::TOP_LEFT, "szyc.dev");
@@ -10,19 +10,15 @@ void drawCommon(Display& it, bool alert = false) {
         it.print(230, 10, font_24, my_red, TextAlign::TOP_RIGHT, "Offline");
     }
     
-    if (!alert) {
+    if (!id(alert_displayed)) {
         it.filled_triangle(20, 120, 40, 120+10, 40, 120-10, my_gray); // left arrow
         it.filled_triangle(240-20, 120, 240-40, 120+10, 240-40, 120-10, my_gray); // right arrow
     }
 }
 
-void drawAlert(Display& it, const char* line1, const char* line2) {
-    it.print((240 / 2), (140 / 3) * 2 + 5, font_48, my_gray, TextAlign::CENTER, line1);
-    it.print((240 / 2), (140 / 3) * 3 + 5, font_48, my_gray, TextAlign::CENTER, line2);
-}
-
-void drawLaundryAlert(Display& it) {
-    drawAlert(it, "PRANIE", "GOTOWE");
+void drawAlert(Display& it) {
+    it.print((240 / 2), (140 / 3) * 2 + 5, font_48, my_gray, TextAlign::CENTER, id(alert_first_line).c_str());
+    it.print((240 / 2), (140 / 3) * 3 + 5, font_48, my_gray, TextAlign::CENTER, id(alert_second_line).c_str());
 }
 
 void drawSingleValueName(Display& it, const char* sensorName) {
@@ -46,10 +42,10 @@ void drawBrightnessPageInternal(Display& it, const char* sensorName, const char*
     drawPlusMinus(it, isMin, isMax);
 }
 
-void drawBrightnessPage(Display& it, bool laundryAlertDisplayed, const char* sensorName, bool enabled, float state) {
-    drawCommon(it, laundryAlertDisplayed);
-    if (laundryAlertDisplayed) {
-        drawLaundryAlert(it);
+void drawBrightnessPage(Display& it, const char* sensorName, bool enabled, float state) {
+    drawCommon(it);
+    if (id(alert_displayed)) {
+        drawAlert(it);
     }
     else if (!enabled) {
         drawBrightnessPageInternal(it, sensorName, "OFF", true, false);

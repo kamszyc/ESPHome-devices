@@ -16,8 +16,17 @@ api:
   encryption:
     key: !secret api_key
   actions:
-    - action: laundry_alert
+    - action: alert
+      variables:
+        first_line: string
+        second_line: string
       then:
+        - globals.set:
+            id: alert_first_line
+            value: !lambda 'return first_line;'
+        - globals.set:
+            id: alert_second_line
+            value: !lambda 'return second_line;'
         - script.execute: show_alert
 
 ota:
@@ -67,10 +76,18 @@ event:
       - wled_brighten
 
 globals:
-  - id: laundry_alert_displayed
+  - id: alert_displayed
     type: bool
     restore_value: no
     initial_value: 'false'
+
+  - id: alert_first_line
+    type: std::string
+    restore_value: no
+
+  - id: alert_second_line
+    type: std::string
+    restore_value: no
 
 script:
   - id: backlight_short
@@ -86,13 +103,13 @@ script:
     then:
       - script.stop: backlight_short
       - globals.set:
-          id: laundry_alert_displayed
+          id: alert_displayed
           value: 'true'
       - light.turn_on: backlight
       - component.update: my_display
       - delay: 10min
       - globals.set:
-          id: laundry_alert_displayed
+          id: alert_displayed
           value: 'false'
       - component.update: my_display
       - light.turn_off: backlight
@@ -102,7 +119,7 @@ script:
     then:
       - script.stop: show_alert
       - globals.set:
-          id: laundry_alert_displayed
+          id: alert_displayed
           value: 'false'
       - component.update: my_display
       - light.turn_off: backlight
@@ -170,19 +187,19 @@ display:
     pages: 
       - id: page_yeelight
         lambda: |- 
-          drawBrightnessPage(it, id(laundry_alert_displayed), "Yeelight", id(yeelight).state, id(yeelight_brightness).state);
+          drawBrightnessPage(it, "Yeelight", id(yeelight).state, id(yeelight_brightness).state);
       - id: page_lamp
         lambda: |- 
-          drawBrightnessPage(it, id(laundry_alert_displayed), "Lampka", id(lamp).state, id(lamp_brightness).state);
+          drawBrightnessPage(it, "Lampka", id(lamp).state, id(lamp_brightness).state);
       - id: page_yeelight_ambilight
         lambda: |- 
-          drawBrightnessPage(it, id(laundry_alert_displayed), "Ambilight", id(yeelight_ambilight).state, id(yeelight_ambilight_brightness).state);
+          drawBrightnessPage(it, "Ambilight", id(yeelight_ambilight).state, id(yeelight_ambilight_brightness).state);
       - id: page_wled
         lambda: |- 
-          drawBrightnessPage(it, id(laundry_alert_displayed), "WLED", id(wled).state, id(wled_brightness).state);
+          drawBrightnessPage(it, "WLED", id(wled).state, id(wled_brightness).state);
       - id: page_display_brightness
         lambda: |- 
-          drawBrightnessPage(it, id(laundry_alert_displayed), "Jasnosc tutaj", id(backlight).remote_values.is_on(), id(backlight).remote_values.get_brightness() * 255);
+          drawBrightnessPage(it, "Jasnosc tutaj", id(backlight).remote_values.is_on(), id(backlight).remote_values.get_brightness() * 255);
     on_page_change: 
       then:
         - component.update: my_display
@@ -198,7 +215,7 @@ binary_sensor:
     name: "Button A"
     filters:
       - lambda: |-
-          if (id(laundry_alert_displayed)) {
+          if (id(alert_displayed)) {
             id(disable_alert).execute();
             return false;
           } else {
@@ -215,7 +232,7 @@ binary_sensor:
     name: "Button B"
     filters:
       - lambda: |-
-          if (id(laundry_alert_displayed)) {
+          if (id(alert_displayed)) {
             id(disable_alert).execute();
             return false;
           } else {
@@ -232,7 +249,7 @@ binary_sensor:
     name: "Button X"
     filters:
       - lambda: |-
-          if (id(laundry_alert_displayed)) {
+          if (id(alert_displayed)) {
             id(disable_alert).execute();
             return false;
           } else {
@@ -249,7 +266,7 @@ binary_sensor:
     name: "Button Y"
     filters:
       - lambda: |-
-          if (id(laundry_alert_displayed)) {
+          if (id(alert_displayed)) {
             id(disable_alert).execute();
             return false;
           } else {
@@ -267,7 +284,7 @@ binary_sensor:
     internal: True
     filters:
       - lambda: |-
-          if (id(laundry_alert_displayed)) {
+          if (id(alert_displayed)) {
             id(disable_alert).execute();
             return false;
           } else {

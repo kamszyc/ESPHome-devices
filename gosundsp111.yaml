@@ -86,6 +86,7 @@ binary_sensor:
   - platform: wireguard
     status:
       name: 'WireGuard Status'
+      icon: mdi:vpn
       device_class: connectivity
       entity_category: "diagnostic"
 
@@ -168,4 +169,4 @@ button:
   - platform: wake_on_lan
     name: "Wake server"
     target_mac_address: !secret server_mac_address
-    icon: "mdi:power"
+    icon: "mdi:lan-connect"

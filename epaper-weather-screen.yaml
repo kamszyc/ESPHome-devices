@@ -7,6 +7,14 @@ esphome:
     priority: -100
     then:
       - script.execute: http_req
+      - logger.log: "Checking sleep"
+      - lambda: |-
+          if(id(remote_defeat).state) {
+            ESP_LOGD("main", "Remote prevent sleep");
+            id(deep_sleep_1).prevent_deep_sleep();
+          } else {
+            ESP_LOGD("main", "Remote allow sleep");
+          }
       
 
 esp32:
@@ -14,6 +22,11 @@ esp32:
   framework:
     type: esp-idf
 
+deep_sleep:
+  run_duration: 20s
+  sleep_duration: 3580s
+  id: deep_sleep_1
+  
 # Enable logging
 logger:
 
@@ -151,11 +164,6 @@ script:
 
 http_request:
 
-interval:
-  - interval: 1h
-    then:
-      - script.execute: http_req
-
 sensor:
   - platform: template
     name: "Temperature"
@@ -183,6 +191,24 @@ button:
     name: "Restart"
     id: restart_button
 
+binary_sensor:
+  - platform: status
+    name: "Status"
+    device_class: connectivity
+
+  - platform: homeassistant
+    name: "Remote Defeat Sleep"
+    internal: True
+    id: "remote_defeat"
+    entity_id: input_boolean.defeat_sleep
+    on_press:
+      then:
+        - logger.log: "Remote prevent sleep"
+        - deep_sleep.prevent: deep_sleep_1
+    on_release:
+      then:
+        - logger.log: "Remote allow sleep"
+        - deep_sleep.allow: deep_sleep_1
 
 image:
   - file: "epaper-weather-screen/icon/01d.png"

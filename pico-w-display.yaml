@@ -96,7 +96,6 @@ script:
       - light.turn_on: backlight
       - delay: 5s
       - light.turn_off: backlight
-      - display.page.show: page_yeelight
 
   - id: show_alert
     mode: restart
@@ -113,7 +112,6 @@ script:
           value: 'false'
       - component.update: my_display
       - light.turn_off: backlight
-      - display.page.show: page_yeelight
 
   - id: disable_alert
     then:
@@ -157,6 +155,9 @@ light:
     output: gpio13
     id: backlight
     restore_mode: RESTORE_AND_OFF
+    on_turn_off: 
+      then:
+      - display.page.show: page_yeelight
 
 spi:
   clk_pin: GPIO10

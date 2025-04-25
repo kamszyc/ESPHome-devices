@@ -78,7 +78,7 @@ display:
     dc_pin: GPIO3
     reset_pin: GPIO1
     busy_pin: GPIO0
-    rotation: 270
+    rotation: 90
     full_update_every: 1
     update_interval: never
     lambda: |-

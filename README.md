@@ -1,7 +1,7 @@
 # Personal ESPHome devices source code 
 
 ## Pico Light Control
-Home Assistant integrated screen with buttons for controlling lights.
+Home Assistant integrated screen with buttons for controlling lights. \
 Built with:
 - Raspberry Pi Pico W
 - [Waveshare Pico LCD 1.3](www.waveshare.com/wiki/Pico-LCD-1.3)
@@ -10,7 +10,7 @@ Built with:
 ![image](pico-light-control/photo.jpg)
 
 ## Epaper Weather Screen
-Epaper screen that displays weather image and also temperature: current, morning and max for the day.
+Epaper screen that displays weather image and also temperature: current, morning and max for the day. \
 Built with:
 - ESP32-C3 Super Mini board from Aliexpress
 - WeAct 2.9" ePaper screen from Aliexpress

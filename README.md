@@ -4,7 +4,7 @@
 Home Assistant integrated screen with buttons for controlling lights. \
 Built with:
 - Raspberry Pi Pico W
-- [Waveshare Pico LCD 1.3](www.waveshare.com/wiki/Pico-LCD-1.3)
+- [Waveshare Pico LCD 1.3](https://www.waveshare.com/wiki/Pico-LCD-1.3)
 - [3D printed case](https://www.printables.com/model/736288-raspberry-pico-rp2040-case)
 
 ![image](pico-light-control/photo.jpg)

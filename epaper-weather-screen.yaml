@@ -126,13 +126,13 @@ display:
           {12, "Gru"}
       };
       std::map<int, const char*> day_of_week_pl = {
-          {0, "Nie"},  // niedziela
-          {1, "Pon"},  // poniedzialek
-          {2, "Wto"},  // wtorek
-          {3, "Sro"},  // sroda
-          {4, "Czw"},  // czwartek
-          {5, "Pia"},  // piatek
-          {6, "Sob"}   // sobota
+          {0, "Niedz"},  // niedziela
+          {1, "Ponied"},  // poniedzialek
+          {2, "Wtorek"},  // wtorek
+          {3, "Sroda"},  // sroda
+          {4, "Czwart"},  // czwartek
+          {5, "Piatek"},  // piatek
+          {6, "Sobota"}   // sobota
       };
       it.printf(0, 0, id(font48), "%.1f°C", id(temperature).state);
       it.printf(0, 52, id(font24), "%02d %s (%s)", timeinfo->tm_mday, month_map_pl[timeinfo->tm_mon + 1], day_of_week_pl[timeinfo->tm_wday]);

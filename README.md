@@ -1,8 +1,8 @@
 # Personal ESPHome devices source code 
 
 ## Pico Light Control
-Home Assistant integrated screen with buttons for controlling lights. \
-Built with:
+Home Assistant integrated screen with buttons for controlling lights.
+### Built with
 - Raspberry Pi Pico W
 - [Waveshare Pico LCD 1.3](https://www.waveshare.com/wiki/Pico-LCD-1.3)
 - [3D printed case](https://www.printables.com/model/736288-raspberry-pico-rp2040-case)
@@ -10,10 +10,10 @@ Built with:
 ![image](pico-light-control/photo.jpg)
 
 ## Epaper Weather Screen
-Epaper screen that retrieves weather from OpenWeatherMap API and displays it as image and temperature as text: current, morning and max for the day. \
-Built with:
-- ESP32-C3 Super Mini board from Aliexpress
-- WeAct 2.9" ePaper screen from Aliexpress
+Epaper screen that retrieves weather from OpenWeatherMap API and displays it as image and temperature as text: current, morning and max for the day.
+### Built with
+- ESP32-C3 Super Mini board from AliExpress
+- WeAct 2.9" ePaper screen from AliExpress
 - 3D printed case (slighty modified [this model](https://www.printables.com/model/786905-weact-29-epaper-case/files))
 
 ![image](epaper-weather-screen/photo.jpg)

@@ -14,7 +14,7 @@ Epaper screen that retrieves weather from OpenWeatherMap API and displays it as 
 ### Built with
 - ESP32-C3 Super Mini board from AliExpress
 - WeAct 2.9" ePaper screen from AliExpress
-- [3D printed case (my model, created as remix of other one)](https://www.printables.com/model/1302545-weact-29-epaper-case-remix)
+- [3D printed case](https://www.printables.com/model/1302545-weact-29-epaper-case-remix) (my model, created as remix of other one)
 
 ![image](epaper-weather-screen/photo.jpg)
 

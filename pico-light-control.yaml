@@ -1,6 +1,7 @@
 esphome:
   name: pico-light-control
   friendly_name: Pico Light Control
+  min_version: 2025.5.0
   includes:
     - pico-light-control/drawing.h
     - pico-light-control/joystick.h
@@ -169,11 +170,11 @@ button:
     id: restart_button
 
 display:
-  - platform: ili9xxx
+  - platform: mipi_spi
     model: ST7789V
     id: my_display
     invert_colors: true
-    color_palette: 8BIT
+    color_depth: 8
     dimensions:
       height: 240
       width: 240

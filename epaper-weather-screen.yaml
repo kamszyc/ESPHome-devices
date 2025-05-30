@@ -59,9 +59,15 @@ font:
   - file: "gfonts://Roboto"
     id: font24
     size: 24
+    glyphsets:
+      - GF_Latin_Core
+      - GF_Latin_Plus
   - file: "gfonts://Roboto"
     id: font48
     size: 48
+    glyphsets:
+      - GF_Latin_Core
+      - GF_Latin_Plus
 
 globals:
   - id: current_image
@@ -121,7 +127,7 @@ display:
           {7, "Lip"},
           {8, "Sie"},
           {9, "Wrz"},
-          {10, "Paz"},
+          {10, "Paź"},
           {11, "Lis"},
           {12, "Gru"}
       };
@@ -129,9 +135,9 @@ display:
           {0, "Niedz"},  // niedziela
           {1, "Ponied"},  // poniedzialek
           {2, "Wtorek"},  // wtorek
-          {3, "Sroda"},  // sroda
+          {3, "Środa"},  // sroda
           {4, "Czwart"},  // czwartek
-          {5, "Piatek"},  // piatek
+          {5, "Piątek"},  // piatek
           {6, "Sobota"}   // sobota
       };
       it.printf(0, 0, id(font48), "%.1f°C", id(temperature).state);

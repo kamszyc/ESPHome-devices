@@ -62,12 +62,14 @@ font:
     glyphsets:
       - GF_Latin_Core
       - GF_Latin_Plus
+    ignore_missing_glyphs: True
   - file: "gfonts://Roboto"
     id: font48
     size: 48
     glyphsets:
       - GF_Latin_Core
       - GF_Latin_Plus
+    ignore_missing_glyphs: True
 
 globals:
   - id: current_image

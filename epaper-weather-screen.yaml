@@ -142,8 +142,8 @@ display:
       };
       it.printf(0, 0, id(font48), "%.1f°C", id(temperature).state);
       it.printf(0, 52, id(font24), "%02d %s (%s)", timeinfo->tm_mday, month_map_pl[timeinfo->tm_mon + 1], day_of_week_pl[timeinfo->tm_wday]);
-      it.printf(0, 76, id(font24), "Rano: %.1f°C", id(temperature_morn).state);
-      it.printf(0, 100, id(font24), "Maks: %.1f°C", id(temperature_max).state);
+      it.printf(0, 78, id(font24), "Rano: %.1f°C", id(temperature_morn).state);
+      it.printf(0, 104, id(font24), "Maks: %.1f°C", id(temperature_max).state);
 
 script:
   - id: http_req

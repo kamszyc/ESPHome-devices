@@ -9,8 +9,8 @@ Home Assistant integrated screen with buttons for controlling lights.
 
 ![image](pico-light-control/photo.jpg)
 
-## Epaper Weather Screen
-Epaper screen that retrieves weather from OpenWeatherMap API and displays it as image and temperature as text: current, morning and max for the day.
+## E-paper Weather Screen
+E-paper screen that retrieves weather from OpenWeatherMap API and displays it as image and temperature as text: current, morning and max for the day.
 ### Built with
 - ESP32-C3 Super Mini board from AliExpress
 - WeAct 2.9" ePaper screen from AliExpress

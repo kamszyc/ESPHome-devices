@@ -201,7 +201,7 @@ display:
           drawBrightnessPage(it, "WLED", id(wled).state, id(wled_brightness).state);
       - id: page_display_brightness
         lambda: |- 
-          drawBrightnessPage(it, "Jasnosc tutaj", id(backlight).remote_values.is_on(), id(backlight).remote_values.get_brightness() * 255);
+          drawBrightnessPage(it, "Jasność tutaj", id(backlight).remote_values.is_on(), id(backlight).remote_values.get_brightness() * 255);
     on_page_change: 
       then:
         - component.update: my_display
@@ -413,15 +413,23 @@ font:
   - file: "pico-light-control/Helvetica-Bold.ttf"
     id: font_bold_48
     size: 48
+    glyphs: |
+      ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,:;!?-_/()[]{}@#%^&*ąćęłńóśźżĄĆĘŁŃÓŚŹŻ+–
   - file: "pico-light-control/Helvetica.ttf"
     id: font_48
     size: 48
+    glyphs: |
+      ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,:;!?-_/()[]{}@#%^&*ąćęłńóśźżĄĆĘŁŃÓŚŹŻ+–
   - file: "pico-light-control/Helvetica.ttf"
     id: font_30
     size: 30
+    glyphs: |
+      ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,:;!?-_/()[]{}@#%^&*ąćęłńóśźżĄĆĘŁŃÓŚŹŻ+–
   - file: "pico-light-control/Helvetica.ttf"
     id: font_24
     size: 24
+    glyphs: |
+      ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,:;!?-_/()[]{}@#%^&*ąćęłńóśźżĄĆĘŁŃÓŚŹŻ+–
 
 sensor:
   - platform: homeassistant

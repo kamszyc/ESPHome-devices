@@ -415,21 +415,28 @@ font:
     size: 48
     glyphs: |
       ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,:;!?-_/()[]{}@#%^&*ąćęłńóśźżĄĆĘŁŃÓŚŹŻ+–
+    ignore_missing_glyphs: True
+    
   - file: "pico-light-control/Helvetica.ttf"
     id: font_48
     size: 48
     glyphs: |
       ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,:;!?-_/()[]{}@#%^&*ąćęłńóśźżĄĆĘŁŃÓŚŹŻ+–
+    ignore_missing_glyphs: True
+
   - file: "pico-light-control/Helvetica.ttf"
     id: font_30
     size: 30
     glyphs: |
       ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,:;!?-_/()[]{}@#%^&*ąćęłńóśźżĄĆĘŁŃÓŚŹŻ+–
+    ignore_missing_glyphs: True
+
   - file: "pico-light-control/Helvetica.ttf"
     id: font_24
     size: 24
     glyphs: |
       ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,:;!?-_/()[]{}@#%^&*ąćęłńóśźżĄĆĘŁŃÓŚŹŻ+–
+    ignore_missing_glyphs: True
 
 sensor:
   - platform: homeassistant

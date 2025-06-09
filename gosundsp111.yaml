@@ -100,11 +100,6 @@ sensor:
     unit_of_measurement: kWh
     icon: mdi:calendar-clock
 
-  - platform: adc
-    pin: VCC
-    name: "VCC Volt"
-    icon: mdi:flash-outline
-
   - platform: hlw8012
     sel_pin:
       number: GPIO12
@@ -115,18 +110,6 @@ sensor:
     current_resistor: ${current_res}
     voltage_divider: ${voltage_div}
     update_interval: 3s
-
-    current:
-      name: "Ampere"
-      unit_of_measurement: A
-      accuracy_decimals: 3
-      icon: mdi:current-ac
-
-    voltage:
-      name: "Volt"
-      unit_of_measurement: V
-      accuracy_decimals: 1
-      icon: mdi:flash-outline
 
     power:
       name: "Watt"

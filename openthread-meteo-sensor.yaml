@@ -1,0 +1,52 @@
+esphome:
+  name: openthread-meteo-sensor
+  friendly_name: OpenThread Meteo Sensor
+  min_version: 2025.6.0
+  name_add_mac_suffix: false
+
+esp32:
+  board: esp32-h2-devkitm-1
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret api_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+network:
+  enable_ipv6: true
+
+openthread:
+  tlv: !secret openthread_tlv
+
+i2c:
+  sda: 10
+  scl: 11
+  scan: false
+
+sensor:
+  - platform: bmp280_i2c
+    update_interval: 60s
+    pressure:
+      name: "Pressure"
+      accuracy_decimals: 1
+
+  - platform: aht10
+    variant: AHT20
+    update_interval: 60s
+    temperature:
+      name: "Temperature"
+      id: aht20_temp
+      accuracy_decimals: 1
+    humidity:
+      name: "Humidity"
+      id: aht20_humidity
+      accuracy_decimals: 1

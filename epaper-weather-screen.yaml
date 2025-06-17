@@ -204,11 +204,6 @@ sensor:
     id: temperature_max
     internal: True
 
-button:
-  - platform: restart
-    name: "Restart"
-    id: restart_button
-
 binary_sensor:
   - platform: status
     name: "Status"

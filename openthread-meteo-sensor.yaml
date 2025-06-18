@@ -37,6 +37,7 @@ sensor:
     update_interval: 5min
     pressure:
       name: "Pressure"
+      id: bmp280_pressure
       accuracy_decimals: 1
 
   - platform: aht10
@@ -50,3 +51,21 @@ sensor:
       name: "Humidity"
       id: aht20_humidity
       accuracy_decimals: 1
+
+  - platform: template
+    name: "Sea level pressure"
+    id: sea_level_pressure
+    lambda: |-
+      return id(bmp280_pressure).state / powf(1 - ((0.0065 * id(altitude).state) /
+        (id(aht20_temp).state + (0.0065 * id(altitude).state) + 273.15)), 5.257); // in hPa
+    update_interval: 5min
+    unit_of_measurement: 'hPa'
+    device_class: pressure
+    state_class: measurement
+    accuracy_decimals: 1
+
+number:
+  - platform: homeassistant
+    name: "Altitude"
+    id: altitude
+    entity_id: input_number.altitude

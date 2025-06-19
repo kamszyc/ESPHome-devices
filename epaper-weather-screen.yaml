@@ -177,9 +177,19 @@ script:
                   });
           on_error:
             then:
+              - event.trigger: 
+                  id: http_request_error
+                  event_type: "http_request_error"
               - logger.log: "Request failed!"
 
 http_request:
+  
+event:
+  - id: http_request_error
+    name: "HTTP request error"
+    platform: template
+    event_types:
+      - http_request_error
 
 sensor:
   - platform: template

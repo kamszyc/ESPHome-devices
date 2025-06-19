@@ -42,7 +42,7 @@ wifi:
     static_ip: 192.168.1.123
     gateway: 192.168.1.1
     subnet: 255.255.255.0
-    
+
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     password: !secret fallback_hotspot_password
@@ -133,7 +133,7 @@ script:
             - lambda: |-
                 handle_joystick_updown(UP);
             - delay: 500ms
-                
+
   - id: joystick_down_script
     mode: restart
     then:
@@ -156,14 +156,14 @@ light:
     output: gpio13
     id: backlight
     restore_mode: RESTORE_AND_OFF
-    on_turn_off: 
+    on_turn_off:
       then:
-      - display.page.show: page_yeelight
+        - display.page.show: page_yeelight
 
 spi:
   clk_pin: GPIO10
   mosi_pin: GPIO11
-  
+
 button:
   - platform: restart
     name: "Restart"
@@ -186,23 +186,23 @@ display:
     rotation: 90
     data_rate: 80MHz
     update_interval: 10d # NEVER, screen is updated manually
-    pages: 
+    pages:
       - id: page_yeelight
-        lambda: |- 
+        lambda: |-
           drawBrightnessPage(it, "Yeelight", id(yeelight).state, id(yeelight_brightness).state);
       - id: page_lamp
-        lambda: |- 
+        lambda: |-
           drawBrightnessPage(it, "Lampka", id(lamp).state, id(lamp_brightness).state);
       - id: page_yeelight_ambilight
-        lambda: |- 
+        lambda: |-
           drawBrightnessPage(it, "Ambilight", id(yeelight_ambilight).state, id(yeelight_ambilight_brightness).state);
       - id: page_wled
-        lambda: |- 
+        lambda: |-
           drawBrightnessPage(it, "WLED", id(wled).state, id(wled_brightness).state);
       - id: page_display_brightness
-        lambda: |- 
+        lambda: |-
           drawBrightnessPage(it, "Jasność tutaj", id(backlight).remote_values.is_on(), id(backlight).remote_values.get_brightness() * 255);
-    on_page_change: 
+    on_page_change:
       then:
         - component.update: my_display
 
@@ -292,15 +292,15 @@ binary_sensor:
           } else {
             return x;
           }
-    on_click: 
+    on_click:
       then:
         - script.execute: backlight_short
         - component.update: my_display
-    on_multi_click: 
-    - timing:
-      - ON for at least 5s
-      then:
-      - button.press: restart_button
+    on_multi_click:
+      - timing:
+          - ON for at least 5s
+        then:
+          - button.press: restart_button
 
   - platform: gpio
     pin:
@@ -316,7 +316,7 @@ binary_sensor:
       - script.execute: joystick_up_script
     on_release:
       - script.stop: joystick_up_script
-      
+
   - platform: gpio
     pin:
       number: GPIO18
@@ -342,9 +342,9 @@ binary_sensor:
     name: "Joystick Left"
     internal: True
     on_click:
-      then: 
-      - script.execute: backlight_short
-      - display.page.show_previous: my_display
+      then:
+        - script.execute: backlight_short
+        - display.page.show_previous: my_display
 
   - platform: gpio
     pin:
@@ -356,21 +356,21 @@ binary_sensor:
     name: "Joystick Right"
     internal: True
     on_click:
-      then: 
-      - script.execute: backlight_short
-      - display.page.show_next: my_display
+      then:
+        - script.execute: backlight_short
+        - display.page.show_next: my_display
 
   - platform: status
     name: "Node Status"
     id: system_status
-    on_state: 
+    on_state:
       then:
-      - component.update: my_display
+        - component.update: my_display
 
   - platform: homeassistant
     id: lamp
     entity_id: light.ikea_tradfri_lampka_swiatlo
-    
+
   - platform: homeassistant
     id: yeelight
     entity_id: light.yeelight_lamp15_0x1e4bf3ad
@@ -416,7 +416,7 @@ font:
     glyphs: |
       ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,:;!?-_/()[]{}@#%^&*ąćęłńóśźżĄĆĘŁŃÓŚŹŻ+–
     ignore_missing_glyphs: True
-    
+
   - file: "pico-light-control/Helvetica.ttf"
     id: font_48
     size: 48
@@ -443,55 +443,55 @@ sensor:
     id: yeelight_brightness
     entity_id: light.yeelight_lamp15_0x1e4bf3ad
     attribute: brightness
-    on_value: 
+    on_value:
       then:
-      - if:
-          all:
-          - display.is_displaying_page: page_yeelight
-          - light.is_on: backlight
-          then:
-            - component.update: my_display
+        - if:
+            all:
+              - display.is_displaying_page: page_yeelight
+              - light.is_on: backlight
+            then:
+              - component.update: my_display
 
   - platform: homeassistant
     id: lamp_brightness
     entity_id: light.ikea_tradfri_lampka_swiatlo
     attribute: brightness
-    on_value: 
+    on_value:
       then:
-      - if:
-          all:
-          - display.is_displaying_page: page_lamp
-          - light.is_on: backlight
-          then:
-            - component.update: my_display
+        - if:
+            all:
+              - display.is_displaying_page: page_lamp
+              - light.is_on: backlight
+            then:
+              - component.update: my_display
 
   - platform: homeassistant
     id: yeelight_ambilight_brightness
     entity_id: light.yeelight_lamp15_0x1e4bf3ad_ambilight
     attribute: brightness
-    on_value: 
+    on_value:
       then:
-      - if:
-          all:
-          - display.is_displaying_page: page_yeelight_ambilight
-          - light.is_on: backlight
-          then:
-            - component.update: my_display
+        - if:
+            all:
+              - display.is_displaying_page: page_yeelight_ambilight
+              - light.is_on: backlight
+            then:
+              - component.update: my_display
 
   - platform: homeassistant
     id: wled_brightness
     entity_id: light.wled
     attribute: brightness
-    on_value: 
+    on_value:
       then:
-      - if:
-          all:
-          - display.is_displaying_page: page_wled
-          - light.is_on: backlight
-          then:
-            - component.update: my_display
+        - if:
+            all:
+              - display.is_displaying_page: page_wled
+              - light.is_on: backlight
+            then:
+              - component.update: my_display
 
-text_sensor:  
+text_sensor:
   - platform: version
     name: "Version"
     icon: mdi:cube-outline

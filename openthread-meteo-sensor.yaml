@@ -21,6 +21,9 @@ ota:
   - platform: esphome
     password: !secret ota_password
 
+web_server:
+  version: 3
+
 network:
   enable_ipv6: true
 

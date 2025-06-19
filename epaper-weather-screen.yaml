@@ -15,7 +15,6 @@ esphome:
           } else {
             ESP_LOGD("main", "Remote allow sleep");
           }
-      
 
 esp32:
   board: esp32-c3-devkitm-1
@@ -26,7 +25,7 @@ deep_sleep:
   run_duration: 20s
   sleep_duration: 1780s
   id: deep_sleep_1
-  
+
 # Enable logging
 logger:
 
@@ -37,8 +36,8 @@ api:
 
 # Allow Over-The-Air updates
 ota:
-- platform: esphome
-  password: !secret ota_password
+  - platform: esphome
+    password: !secret ota_password
 
 wifi:
   ssid: !secret wifi_ssid
@@ -53,7 +52,7 @@ captive_portal:
 
 spi:
   mosi_pin: GPIO6 # aka SDA
-  clk_pin: GPIO7  #aka SCL
+  clk_pin: GPIO7 # aka SCL
 
 font:
   - file: "gfonts://Roboto"
@@ -150,7 +149,7 @@ display:
 script:
   - id: http_req
     then:
-    - http_request.get:
+      - http_request.get:
           url: !secret openweathermap_url
           capture_response: true
           max_response_buffer_size: 8192

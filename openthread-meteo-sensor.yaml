@@ -37,11 +37,16 @@ i2c:
 
 sensor:
   - platform: bmp280_i2c
-    update_interval: 5min
+    update_interval: never
+    id: bmp280
     pressure:
       name: "Pressure"
       id: bmp280_pressure
       accuracy_decimals: 1
+      on_value: 
+        then:
+          - component.update: sea_level_pressure
+    
 
   - platform: aht10
     variant: AHT20
@@ -50,6 +55,9 @@ sensor:
       name: "Temperature"
       id: aht20_temp
       accuracy_decimals: 1
+      on_value: 
+        then:
+          - component.update: bmp280
     humidity:
       name: "Humidity"
       id: aht20_humidity
@@ -61,7 +69,7 @@ sensor:
     lambda: |-
       return id(bmp280_pressure).state / powf(1 - ((0.0065 * id(altitude).state) /
         (id(aht20_temp).state + (0.0065 * id(altitude).state) + 273.15)), 5.257); // in hPa
-    update_interval: 5min
+    update_interval: never
     unit_of_measurement: 'hPa'
     device_class: pressure
     state_class: measurement

@@ -23,6 +23,7 @@ ota:
 
 web_server:
   version: 3
+  log: False
 
 network:
   enable_ipv6: true

@@ -6,7 +6,7 @@ esphome:
   on_boot:
     priority: -100
     then:
-      - script.execute: http_req
+      - script.execute: http_req_openweathermap
       - logger.log: "Checking sleep"
       - lambda: |-
           if(id(remote_defeat).state) {
@@ -143,11 +143,11 @@ display:
       };
       it.printf(0, 0, id(font48), "%.1f°C", id(temperature).state);
       it.printf(0, 52, id(font24), "%02d %s (%s)", timeinfo->tm_mday, month_map_pl[timeinfo->tm_mon + 1], day_of_week_pl[timeinfo->tm_wday]);
-      it.printf(0, 78, id(font24), "Rano: %.1f°C", id(temperature_morn).state);
-      it.printf(0, 104, id(font24), "Maks: %.1f°C", id(temperature_max).state);
+      it.printf(0, 78, id(font24), "%.1f°C - %.1f°C", id(temperature_morn).state, id(temperature_max).state);
+      it.printf(0, 104, id(font24), "AQI: %s", id(air_quality_index).state.c_str());
 
 script:
-  - id: http_req
+  - id: http_req_openweathermap
     then:
       - http_request.get:
           url: !secret openweathermap_url
@@ -156,7 +156,7 @@ script:
           on_response:
             then:
               - logger.log:
-                  format: "Response status: %d, Duration: %u ms"
+                  format: "OpenWeatherMap - Response status: %d, Duration: %u ms"
                   args:
                     - response->status_code
                     - response->duration_ms
@@ -172,6 +172,35 @@ script:
 
                       id(current_image) = std::string(daily["weather"][0]["icon"]);
                       id(current_unix_timestamp) = daily["dt"];
+                      id(http_req_gios).execute();
+                      return true;
+                  });
+          on_error:
+            then:
+              - event.trigger: 
+                  id: http_request_error
+                  event_type: "http_request_error_openweathermap"
+              - logger.log: "OpenWeatherMap - request failed!"
+
+  - id: http_req_gios
+    then:
+      - http_request.get:
+          url: !secret gios_url
+          capture_response: true
+          max_response_buffer_size: 8192
+          on_response:
+            then:
+              - logger.log:
+                  format: "GIOŚ - Response status: %d, Duration: %u ms"
+                  args:
+                    - response->status_code
+                    - response->duration_ms
+              - lambda: |-
+                  json::parse_json(body, [](JsonObject root) -> bool {
+                      JsonObject aqIndex = root["AqIndex"];
+                      auto aqCategory = std::string(aqIndex["Nazwa kategorii indeksu"]);
+
+                      id(air_quality_index).publish_state(aqCategory);
                       id(my_display).update();
                       return true;
                   });
@@ -179,8 +208,8 @@ script:
             then:
               - event.trigger: 
                   id: http_request_error
-                  event_type: "http_request_error"
-              - logger.log: "Request failed!"
+                  event_type: "http_request_error_gios"
+              - logger.log: "GIOŚ - request failed!"
 
 http_request:
   
@@ -189,7 +218,8 @@ event:
     name: "HTTP request error"
     platform: template
     event_types:
-      - http_request_error
+      - http_request_error_openweathermap
+      - http_request_error_gios
 
 sensor:
   - platform: template
@@ -211,6 +241,12 @@ sensor:
     unit_of_measurement: "°C"
     accuracy_decimals: 1
     id: temperature_max
+    internal: True
+
+text_sensor:
+  - platform: template
+    name: "Air quality index"
+    id: air_quality_index
     internal: True
 
 binary_sensor:

@@ -56,12 +56,24 @@ spi:
 
 font:
   - file: "gfonts://Roboto"
+    id: font22
+    size: 22
+    glyphsets:
+      - GF_Latin_Core
+      - GF_Latin_Plus
+    extras:
+      - file: "gfonts://Roboto+Flex"
+        glyphs: ["↓↑"]
+    ignore_missing_glyphs: True
+
+  - file: "gfonts://Roboto"
     id: font24
     size: 24
     glyphsets:
       - GF_Latin_Core
       - GF_Latin_Plus
     ignore_missing_glyphs: True
+    
   - file: "gfonts://Roboto"
     id: font48
     size: 48
@@ -143,8 +155,8 @@ display:
       };
       it.printf(0, 0, id(font48), "%.1f°C", id(temperature).state);
       it.printf(0, 52, id(font24), "%02d %s (%s)", timeinfo->tm_mday, month_map_pl[timeinfo->tm_mon + 1], day_of_week_pl[timeinfo->tm_wday]);
-      it.printf(0, 78, id(font24), "%.1f°C - %.1f°C", id(temperature_morn).state, id(temperature_max).state);
-      it.printf(0, 104, id(font24), "AQI: %s", id(air_quality_index).state.c_str());
+      it.printf(0, 80, id(font22), "↓%.1f°C ↑%.1f°C", id(temperature_min).state, id(temperature_max).state);
+      it.printf(0, 106, id(font22), "AQI: %s", id(air_quality_index).state.c_str());
 
 script:
   - id: http_req_openweathermap
@@ -167,7 +179,7 @@ script:
                       JsonObject dailyTemp = daily["temp"];
 
                       id(temperature).publish_state(current["temp"]);
-                      id(temperature_morn).publish_state(dailyTemp["morn"]);
+                      id(temperature_min).publish_state(dailyTemp["min"]);
                       id(temperature_max).publish_state(dailyTemp["max"]);
 
                       id(current_image) = std::string(daily["weather"][0]["icon"]);
@@ -230,10 +242,10 @@ sensor:
     internal: True
 
   - platform: template
-    name: "Temperature morning"
+    name: "Temperature min"
     unit_of_measurement: "°C"
     accuracy_decimals: 1
-    id: temperature_morn
+    id: temperature_min
     internal: True
 
   - platform: template

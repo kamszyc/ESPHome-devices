@@ -50,6 +50,20 @@ wifi:
 
 captive_portal:
 
+select:
+  - platform: template
+    name: "Language"
+    id: language
+    options:
+      - "English"
+      - "Polski"
+    initial_option: "Polski"
+    optimistic: true
+    restore_value: True
+    on_value:
+      then:
+        - component.update: my_display
+
 spi:
   mosi_pin: GPIO6 # aka SDA
   clk_pin: GPIO7 # aka SCL
@@ -107,10 +121,15 @@ display:
       time_t rawtime = (time_t) id(current_unix_timestamp);
       struct tm * timeinfo = localtime(&rawtime);
 
+      bool isEnglish = id(language).state == "English";
+      auto month_map = isEnglish ? month_map_en : month_map_pl;
+      auto day_of_week = isEnglish ? day_of_week_en : day_of_week_pl;
+      auto aq_index_map = isEnglish ? aq_index_en : aq_index_pl;
+      
       it.printf(0, 0, id(font48), "%.1f°C", id(temperature).state);
       it.printf(0, 52, id(font24), "%02d %s (%s)", timeinfo->tm_mday, month_map[timeinfo->tm_mon + 1].c_str(), day_of_week[timeinfo->tm_wday].c_str());
       it.printf(0, 80, id(font22), "↓%.1f°C ↑%.1f°C", id(temperature_min).state, id(temperature_max).state);
-      it.printf(0, 104, id(font22), "AQI: %s", id(air_quality_index).state.c_str());
+      it.printf(0, 104, id(font22), "AQI: %s", aq_index_map[id(air_quality_index).state].c_str());
 
 script:
   - id: http_req_openweathermap
@@ -164,9 +183,9 @@ script:
               - lambda: |-
                   json::parse_json(body, [](JsonObject root) -> bool {
                       JsonObject aqIndex = root["AqIndex"];
-                      auto aqCategory = std::string(aqIndex["Nazwa kategorii indeksu"]);
+                      auto aqIndexValue = aqIndex["Wartość indeksu"];
 
-                      id(air_quality_index).publish_state(aqCategory);
+                      id(air_quality_index).publish_state(aqIndexValue);
                       id(my_display).update();
                       return true;
                   });
@@ -209,7 +228,6 @@ sensor:
     id: temperature_max
     internal: True
 
-text_sensor:
   - platform: template
     name: "Air quality index"
     id: air_quality_index
@@ -258,7 +276,7 @@ mapping:
       50d: img50d
       50n: img50n
 
-  - id: month_map
+  - id: month_map_pl
     from: int
     to: string
     entries:
@@ -275,7 +293,24 @@ mapping:
       11: Lis
       12: Gru
 
-  - id: day_of_week
+  - id: month_map_en
+    from: int
+    to: string
+    entries:
+      1: Jan
+      2: Feb
+      3: Mar
+      4: Apr
+      5: May
+      6: Jun
+      7: Jul
+      8: Aug
+      9: Sep
+      10: Oct
+      11: Nov
+      12: Dec
+
+  - id: day_of_week_pl
     from: int
     to: string
     entries:
@@ -286,6 +321,40 @@ mapping:
       4: Czwart
       5: Piątek
       6: Sobota
+
+  - id: day_of_week_en
+    from: int
+    to: string
+    entries:
+      0: Sunday
+      1: Monday
+      2: Tuesd
+      3: Wednes
+      4: Thurs
+      5: Friday
+      6: Satur
+
+  - id: aq_index_pl
+    from: int
+    to: string
+    entries:
+      0: Bardzo dobry
+      1: Dobry
+      2: Umiarkowany
+      3: Dostateczny
+      4: Zły
+      5: Bardzo zły 
+
+  - id: aq_index_en
+    from: int
+    to: string
+    entries:
+      0: Very good
+      1: Good
+      2: Moderate
+      3: Fair
+      4: Poor
+      5: Very poor
 
 image:
   - file: "epaper-weather-screen/icon/01d.png"

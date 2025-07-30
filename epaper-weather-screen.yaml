@@ -1,7 +1,7 @@
 esphome:
   name: "epaper-weather-screen"
   friendly_name: E-paper Weather Screen
-  min_version: 2024.11.0
+  min_version: 2025.5.0
   name_add_mac_suffix: false
   on_boot:
     priority: -100
@@ -102,59 +102,13 @@ display:
     full_update_every: 1
     update_interval: never
     lambda: |-
-      std::map<std::string, esphome::image::Image*> weather_icon_map
-      {
-        {"01d", id(img01d)},
-        {"01n", id(img01n)},
-        {"02d", id(img02d)},
-        {"02n", id(img02n)},
-        {"03d", id(img03d)},
-        {"03n", id(img03n)},
-        {"04d", id(img04d)},
-        {"04n", id(img04n)},
-        {"09d", id(img09d)},
-        {"09n", id(img09n)},
-        {"10d", id(img10d)},
-        {"10n", id(img10n)},
-        {"11d", id(img11d)},
-        {"11n", id(img11n)},
-        {"13d", id(img13d)},
-        {"13n", id(img13n)},
-        {"50d", id(img50d)},
-        {"50n", id(img50n)},
-      };
-
       it.image(168, 0, weather_icon_map[id(current_image)]);
 
       time_t rawtime = (time_t) id(current_unix_timestamp);
       struct tm * timeinfo = localtime(&rawtime);
 
-      std::map<int, const char*> month_map_pl
-      {
-          {1, "Sty"},
-          {2, "Lut"},
-          {3, "Mar"},
-          {4, "Kwi"},
-          {5, "Maj"},
-          {6, "Cze"},
-          {7, "Lip"},
-          {8, "Sie"},
-          {9, "Wrz"},
-          {10, "Paź"},
-          {11, "Lis"},
-          {12, "Gru"}
-      };
-      std::map<int, const char*> day_of_week_pl = {
-          {0, "Niedz"},  // niedziela
-          {1, "Ponied"},  // poniedzialek
-          {2, "Wtorek"},  // wtorek
-          {3, "Środa"},  // sroda
-          {4, "Czwart"},  // czwartek
-          {5, "Piątek"},  // piatek
-          {6, "Sobota"}   // sobota
-      };
       it.printf(0, 0, id(font48), "%.1f°C", id(temperature).state);
-      it.printf(0, 52, id(font24), "%02d %s (%s)", timeinfo->tm_mday, month_map_pl[timeinfo->tm_mon + 1], day_of_week_pl[timeinfo->tm_wday]);
+      it.printf(0, 52, id(font24), "%02d %s (%s)", timeinfo->tm_mday, month_map[timeinfo->tm_mon + 1].c_str(), day_of_week[timeinfo->tm_wday].c_str());
       it.printf(0, 80, id(font22), "↓%.1f°C ↑%.1f°C", id(temperature_min).state, id(temperature_max).state);
       it.printf(0, 104, id(font22), "AQI: %s", id(air_quality_index).state.c_str());
 
@@ -184,9 +138,9 @@ script:
 
                       id(current_image) = std::string(daily["weather"][0]["icon"]);
                       id(current_unix_timestamp) = daily["dt"];
-                      id(http_req_gios).execute();
                       return true;
                   });
+              - script.execute: http_req_gios
           on_error:
             then:
               - event.trigger: 
@@ -279,6 +233,59 @@ binary_sensor:
       then:
         - logger.log: "Remote allow sleep"
         - deep_sleep.allow: deep_sleep_1
+
+mapping:
+  - id: weather_icon_map
+    from: string
+    to: image
+    entries:
+      01d: img01d
+      01n: img01n
+      02d: img02d
+      02n: img02n
+      03d: img03d
+      03n: img03n
+      04d: img04d
+      04n: img04n
+      09d: img09d
+      09n: img09n
+      10d: img10d
+      10n: img10n
+      11d: img11d
+      11n: img11n
+      13d: img13d
+      13n: img13n
+      50d: img50d
+      50n: img50n
+
+  - id: month_map
+    from: int
+    to: string
+    entries:
+      1: Sty
+      2: Lut
+      3: Mar
+      4: Kwi
+      5: Maj
+      6: Cze
+      7: Lip
+      8: Sie
+      9: Wrz
+      10: Paź
+      11: Lis
+      12: Gru
+
+  - id: day_of_week
+    from: int
+    to: string
+    entries:
+      0: Niedz
+      1: Ponied
+      2: Wtorek
+      3: Środa
+      4: Czwart
+      5: Piątek
+      6: Sobota
 
 image:
   - file: "epaper-weather-screen/icon/01d.png"

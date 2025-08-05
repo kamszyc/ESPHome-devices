@@ -1,0 +1,48 @@
+esphome:
+  name: ir-remote-control
+  friendly_name: IR Remote Control
+
+bk72xx:
+  board: cb3s
+  
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret api_key
+
+# Allow Over-The-Air updates
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+remote_receiver:
+  pin:
+    number: P7
+    inverted: true
+    mode: INPUT_PULLUP
+
+remote_transmitter:
+  pin: P26
+  carrier_duty_percent: 50%
+
+light:
+  - id: status
+    platform: status_led
+    pin: P8
+
+binary_sensor:
+  - platform: gpio
+    id: button
+    pin:
+      number: P6
+      inverted: true
+      mode:
+        input: true
+        pullup: true

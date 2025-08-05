@@ -53,7 +53,6 @@ remote_receiver:
     mode:
       input: true
       pullup: true
-  tolerance: 55%
   on_sony: 
     - lambda: |-
         ESP_LOGI("sony_ir", "Received Sony → data=0x%X, nbits=%u", x.data, x.nbits);
@@ -145,6 +144,16 @@ button:
       - remote_transmitter.transmit_sony:
           data: 0xA70
           nbits: 12
+          repeat:
+            times: 3
+            wait_time: 40ms
+
+  - platform: template
+    name: "YouTube"
+    on_press:
+      - remote_transmitter.transmit_sony:
+          data: 0x7123
+          nbits: 15
           repeat:
             times: 3
             wait_time: 40ms

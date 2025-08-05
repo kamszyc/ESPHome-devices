@@ -12,15 +12,6 @@ logger:
 api:
   encryption:
     key: !secret api_key
-  actions:
-    - action: send_sony_command
-      variables:
-        code: string
-      then:
-        - remote_transmitter.transmit_sony:
-            data: !lambda 'return stoi(code, 0, 16);'
-            nbits: 12
-            repeat: 2
 
 # Allow Over-The-Air updates
 ota:
@@ -66,3 +57,94 @@ remote_receiver:
   on_sony: 
     - lambda: |-
         ESP_LOGI("sony_ir", "Received Sony → data=0x%X, nbits=%u", x.data, x.nbits);
+
+button:
+  - platform: template
+    name: "Power Toggle"
+    on_press:
+      - remote_transmitter.transmit_sony:
+          data: 0xA90
+          nbits: 12
+          repeat:
+            times: 5
+            wait_time: 40ms
+
+  - platform: template
+    name: "Power On (Discrete)"
+    on_press:
+      - remote_transmitter.transmit_sony:
+          data: 0x750
+          nbits: 12
+          repeat:
+            times: 5
+            wait_time: 40ms
+
+  - platform: template
+    name: "Power Off (Discrete)"
+    on_press:
+      - remote_transmitter.transmit_sony:
+          data: 0xF50
+          nbits: 12
+          repeat:
+            times: 5
+            wait_time: 40ms
+
+  - platform: template
+    name: "Home"
+    on_press:
+      - remote_transmitter.transmit_sony:
+          data: 0x070
+          nbits: 12
+          repeat:
+            times: 3
+            wait_time: 40ms
+
+  - platform: template
+    name: "Up"
+    on_press:
+      - remote_transmitter.transmit_sony:
+          data: 0x2F0
+          nbits: 12
+          repeat:
+            times: 2
+            wait_time: 25ms
+
+  - platform: template
+    name: "Down"
+    on_press:
+      - remote_transmitter.transmit_sony:
+          data: 0xAF0
+          nbits: 12
+          repeat:
+            times: 2
+            wait_time: 25ms
+
+  - platform: template
+    name: "Left"
+    on_press:
+      - remote_transmitter.transmit_sony:
+          data: 0x2D0
+          nbits: 12
+          repeat:
+            times: 2
+            wait_time: 25ms
+
+  - platform: template
+    name: "Right"
+    on_press:
+      - remote_transmitter.transmit_sony:
+          data: 0xCD0
+          nbits: 12
+          repeat:
+            times: 2
+            wait_time: 25ms
+
+  - platform: template
+    name: "Enter/OK"
+    on_press:
+      - remote_transmitter.transmit_sony:
+          data: 0xA70
+          nbits: 12
+          repeat:
+            times: 3
+            wait_time: 40ms

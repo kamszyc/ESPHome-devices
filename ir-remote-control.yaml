@@ -29,7 +29,7 @@ output:
 
 light:
   - platform: monochromatic
-    name: LED
+    id: led_light
     output: led
 
 binary_sensor:
@@ -69,7 +69,7 @@ button:
             wait_time: 40ms
 
   - platform: template
-    name: "Power On (Discrete)"
+    name: "Power On"
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0x750
@@ -79,7 +79,7 @@ button:
             wait_time: 40ms
 
   - platform: template
-    name: "Power Off (Discrete)"
+    name: "Power Off"
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0xF50
@@ -139,7 +139,7 @@ button:
             wait_time: 25ms
 
   - platform: template
-    name: "Enter/OK"
+    name: "OK"
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0xA70

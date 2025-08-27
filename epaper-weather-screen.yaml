@@ -104,6 +104,9 @@ globals:
   - id: current_unix_timestamp
     type: int
 
+  - id: http_error
+    type: bool
+
 display:
   - platform: waveshare_epaper
     id: my_display
@@ -116,6 +119,11 @@ display:
     full_update_every: 1
     update_interval: never
     lambda: |-
+      if (id(http_error)) {
+        it.print(0, 0, id(font48), "HTTP error");
+        return;
+      }
+
       it.image(168, 0, weather_icon_map[id(current_image)]);
 
       time_t rawtime = (time_t) id(current_unix_timestamp);
@@ -162,6 +170,10 @@ script:
               - script.execute: http_req_gios
           on_error:
             then:
+              - globals.set: 
+                  id: http_error
+                  value: 'true'
+              - component.update: my_display
               - event.trigger: 
                   id: http_request_error
                   event_type: "http_request_error_openweathermap"
@@ -186,11 +198,16 @@ script:
                       auto aqIndexValue = aqIndex["Wartość indeksu"];
 
                       id(air_quality_index).publish_state(aqIndexValue);
+                      id(http_error) = false;
                       id(my_display).update();
                       return true;
                   });
           on_error:
             then:
+              - globals.set: 
+                  id: http_error
+                  value: 'true'
+              - component.update: my_display
               - event.trigger: 
                   id: http_request_error
                   event_type: "http_request_error_gios"

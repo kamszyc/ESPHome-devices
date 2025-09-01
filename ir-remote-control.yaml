@@ -66,6 +66,7 @@ remote_receiver:
 button:
   - platform: template
     name: "Power Toggle"
+    icon: mdi:power
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0xA90
@@ -76,6 +77,7 @@ button:
 
   - platform: template
     name: "Power On"
+    icon: mdi:power
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0x750
@@ -86,6 +88,7 @@ button:
 
   - platform: template
     name: "Power Off"
+    icon: mdi:power
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0xF50
@@ -96,6 +99,7 @@ button:
 
   - platform: template
     name: "Home"
+    icon: mdi:home
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0x070
@@ -106,6 +110,7 @@ button:
 
   - platform: template
     name: "Up"
+    icon: mdi:arrow-up-bold
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0x2F0
@@ -116,6 +121,7 @@ button:
 
   - platform: template
     name: "Down"
+    icon: mdi:arrow-down-bold
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0xAF0
@@ -126,6 +132,7 @@ button:
 
   - platform: template
     name: "Left"
+    icon: mdi:arrow-left-bold
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0x2D0
@@ -136,6 +143,7 @@ button:
 
   - platform: template
     name: "Right"
+    icon: mdi:arrow-right-bold
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0xCD0
@@ -146,6 +154,7 @@ button:
 
   - platform: template
     name: "OK"
+    icon: mdi:checkbox-blank-circle
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0xA70
@@ -156,6 +165,7 @@ button:
 
   - platform: template
     name: "Back"
+    icon: mdi:restore
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0x62E9
@@ -166,6 +176,7 @@ button:
 
   - platform: template
     name: "YouTube"
+    icon: mdi:youtube
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0x7123
@@ -176,6 +187,7 @@ button:
 
   - platform: template
     name: "Volume Up"
+    icon: mdi:volume-plus
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0x490
@@ -186,6 +198,7 @@ button:
 
   - platform: template
     name: "Volume Down"
+    icon: mdi:volume-minus
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0xC90
@@ -196,6 +209,7 @@ button:
 
   - platform: template
     name: "Mute"
+    icon: mdi:volume-mute
     on_press:
       - remote_transmitter.transmit_sony:
           data: 0x290

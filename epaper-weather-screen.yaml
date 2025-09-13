@@ -269,6 +269,10 @@ binary_sensor:
         - logger.log: "Remote allow sleep"
         - deep_sleep.allow: deep_sleep_1
 
+button:
+  - platform: restart
+    name: "Restart"
+
 mapping:
   - id: weather_icon_map
     from: string

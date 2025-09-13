@@ -128,6 +128,10 @@ display:
 
       time_t rawtime = (time_t) id(current_unix_timestamp);
       struct tm * timeinfo = localtime(&rawtime);
+      if (timeinfo->tm_hour == 4 && timeinfo->tm_min < 30) // between 4:00 and 4:30
+      { 
+        id(restart_button).press();
+      }
 
       bool isEnglish = id(language).state == "English";
       auto month_map = isEnglish ? month_map_en : month_map_pl;
@@ -271,6 +275,7 @@ binary_sensor:
 
 button:
   - platform: restart
+    id: restart_button
     name: "Restart"
 
 mapping:

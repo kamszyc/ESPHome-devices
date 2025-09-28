@@ -175,6 +175,17 @@ button:
             wait_time: 25ms
 
   - platform: template
+    name: "Settings"
+    icon: mdi:cog
+    on_press:
+      - remote_transmitter.transmit_sony:
+          data: 0x6923
+          nbits: 15
+          repeat:
+            times: 3
+            wait_time: 40ms
+
+  - platform: template
     name: "YouTube"
     icon: mdi:youtube
     on_press:
@@ -183,6 +194,17 @@ button:
           nbits: 15
           repeat:
             times: 3
+            wait_time: 40ms
+
+  - platform: template
+    name: "Netflix"
+    icon: mdi:netflix
+    on_press:
+      - remote_transmitter.transmit_sony:
+          data: 0x1F58
+          nbits: 15
+          repeat:
+            times: 4
             wait_time: 40ms
 
   - platform: template

@@ -76,6 +76,13 @@ event:
       - wled_dim
       - wled_brighten
 
+  - id: room_light_control
+    name: "Room light control"
+    platform: template
+    event_types:
+      - room_light_dim
+      - room_light_brighten
+
 globals:
   - id: alert_displayed
     type: bool
@@ -199,6 +206,9 @@ display:
       - id: page_wled
         lambda: |-
           drawBrightnessPage(it, "WLED", id(wled).state, id(wled_brightness).state);
+      - id: page_room_light
+        lambda: |-
+          drawBrightnessPage(it, "Światło w pokoju", id(room_light).state, id(room_light_brightness).state);
       - id: page_display_brightness
         lambda: |-
           drawBrightnessPage(it, "Jasność tutaj", id(backlight).remote_values.is_on(), id(backlight).remote_values.get_brightness() * 255);
@@ -383,6 +393,10 @@ binary_sensor:
     id: wled
     entity_id: light.wled
 
+  - platform: homeassistant
+    id: room_light
+    entity_id: light.swiatla_w_salonie
+
 color:
   - id: my_red
     red: 100%
@@ -491,6 +505,18 @@ sensor:
             then:
               - component.update: my_display
 
+  - platform: homeassistant
+    id: room_light_brightness
+    entity_id: light.swiatla_w_salonie
+    attribute: brightness
+    on_value:
+      then:
+        - if:
+            all:
+              - display.is_displaying_page: page_room_light
+              - light.is_on: backlight
+            then:
+              - component.update: my_display
 text_sensor:
   - platform: version
     name: "Version"

@@ -34,6 +34,12 @@ void handle_joystick_updown(Direction direction) {
         else
             wled_control->trigger("wled_dim");
     }
+    else if (my_display->get_active_page() == page_room_light) {
+        if (direction == UP)
+            room_light_control->trigger("room_light_brighten");
+        else
+            room_light_control->trigger("room_light_dim");
+    }
     else if (my_display->get_active_page() == page_display_brightness) {
         float b;
         if (direction == UP)

@@ -208,7 +208,7 @@ display:
           drawBrightnessPage(it, "WLED", id(wled).state, id(wled_brightness).state);
       - id: page_room_light
         lambda: |-
-          drawBrightnessPage(it, "Światło w pokoju", id(room_light).state, id(room_light_brightness).state);
+          drawBrightnessPage(it, "Pokój", id(room_light).state, id(room_light_brightness).state);
       - id: page_display_brightness
         lambda: |-
           drawBrightnessPage(it, "Jasność tutaj", id(backlight).remote_values.is_on(), id(backlight).remote_values.get_brightness() * 255);

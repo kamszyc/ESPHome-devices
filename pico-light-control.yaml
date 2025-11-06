@@ -98,6 +98,13 @@ globals:
     restore_value: no
 
 script:
+  - id: backlight_very_short
+    mode: restart
+    then:
+      - light.turn_on: backlight
+      - delay: 2s
+      - light.turn_off: backlight
+
   - id: backlight_short
     mode: restart
     then:
@@ -231,7 +238,7 @@ binary_sensor:
             id(disable_alert).execute();
             return false;
           } else {
-            id(backlight_short).execute();
+            id(backlight_very_short).execute();
             id(my_display).show_page(id(page_yeelight));
             return x;
           }
@@ -250,7 +257,7 @@ binary_sensor:
             id(disable_alert).execute();
             return false;
           } else {
-            id(backlight_short).execute();
+            id(backlight_very_short).execute();
             id(my_display).show_page(id(page_yeelight_ambilight));
             return x;
           }
@@ -269,7 +276,7 @@ binary_sensor:
             id(disable_alert).execute();
             return false;
           } else {
-            id(backlight_short).execute();
+            id(backlight_very_short).execute();
             id(my_display).show_page(id(page_wled));
             return x;
           }
@@ -288,7 +295,7 @@ binary_sensor:
             id(disable_alert).execute();
             return false;
           } else {
-            id(backlight_short).execute();
+            id(backlight_very_short).execute();
             id(my_display).show_page(id(page_room_light));
             return x;
           }

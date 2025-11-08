@@ -98,18 +98,13 @@ globals:
     restore_value: no
 
 script:
-  - id: backlight_very_short
-    mode: restart
-    then:
-      - light.turn_on: backlight
-      - delay: 2s
-      - light.turn_off: backlight
-
   - id: backlight_short
     mode: restart
+    parameters:
+      delay_ms: int
     then:
       - light.turn_on: backlight
-      - delay: 5s
+      - delay: !lambda return delay_ms;
       - light.turn_off: backlight
 
   - id: show_alert
@@ -238,7 +233,7 @@ binary_sensor:
             id(disable_alert).execute();
             return false;
           } else {
-            id(backlight_very_short).execute();
+            id(backlight_short).execute(2000);
             id(my_display).show_page(id(page_yeelight));
             return x;
           }
@@ -257,7 +252,7 @@ binary_sensor:
             id(disable_alert).execute();
             return false;
           } else {
-            id(backlight_very_short).execute();
+            id(backlight_short).execute(2000);
             id(my_display).show_page(id(page_yeelight_ambilight));
             return x;
           }
@@ -276,7 +271,7 @@ binary_sensor:
             id(disable_alert).execute();
             return false;
           } else {
-            id(backlight_very_short).execute();
+            id(backlight_short).execute(2000);
             id(my_display).show_page(id(page_wled));
             return x;
           }
@@ -295,7 +290,7 @@ binary_sensor:
             id(disable_alert).execute();
             return false;
           } else {
-            id(backlight_very_short).execute();
+            id(backlight_short).execute(2000);
             id(my_display).show_page(id(page_room_light));
             return x;
           }
@@ -319,7 +314,9 @@ binary_sensor:
           }
     on_click:
       then:
-        - script.execute: backlight_short
+        - script.execute:
+            id: backlight_short
+            delay_ms: 5000
         - component.update: my_display
     on_multi_click:
       - timing:
@@ -368,7 +365,9 @@ binary_sensor:
     internal: True
     on_click:
       then:
-        - script.execute: backlight_short
+        - script.execute:
+            id: backlight_short
+            delay_ms: 5000
         - display.page.show_previous: my_display
 
   - platform: gpio
@@ -382,7 +381,9 @@ binary_sensor:
     internal: True
     on_click:
       then:
-        - script.execute: backlight_short
+        - script.execute:
+            id: backlight_short
+            delay_ms: 5000
         - display.page.show_next: my_display
 
   - platform: status

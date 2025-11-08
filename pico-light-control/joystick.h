@@ -4,7 +4,7 @@ enum Direction {
 };
 
 void handle_joystick_updown(Direction direction) {
-    backlight_short->execute();
+    backlight_short->execute(5000);
 
     if (!backlight->current_values.is_on()) {
         return;

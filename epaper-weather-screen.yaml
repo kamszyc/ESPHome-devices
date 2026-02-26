@@ -123,7 +123,7 @@ display:
         id(restart_button).press();
       }
 
-      bool isEnglish = id(language).state == "English";
+      bool isEnglish = id(language).current_option() == "English";
       auto month_map = isEnglish ? month_map_en : month_map_pl;
       auto day_of_week = isEnglish ? day_of_week_en : day_of_week_pl;
       auto aq_index_map = isEnglish ? aq_index_en : aq_index_pl;
@@ -200,7 +200,10 @@ script:
             then:
               - globals.set: 
                   id: http_error
-                  value: 'true'
+                  value: 'false'
+              - sensor.template.publish:
+                  id: air_quality_index
+                  state: -1 # Unknown
               - component.update: my_display
               - event.trigger: 
                   id: http_request_error
@@ -208,6 +211,7 @@ script:
               - logger.log: "GIOŚ - request failed!"
 
 http_request:
+  verify_ssl: false
   
 event:
   - id: http_request_error
@@ -340,6 +344,7 @@ mapping:
     from: int
     to: string
     entries:
+      -1: Nieznany
       0: Bardzo dobry
       1: Dobry
       2: Umiarkowany
@@ -351,6 +356,7 @@ mapping:
     from: int
     to: string
     entries:
+      -1: Unknown
       0: Very good
       1: Good
       2: Moderate

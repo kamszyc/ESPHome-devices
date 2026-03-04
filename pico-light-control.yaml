@@ -43,10 +43,6 @@ wifi:
     gateway: 192.168.1.1
     subnet: 255.255.255.0
 
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    password: !secret fallback_hotspot_password
-
 event:
   - id: yeelight_control
     name: "Yeelight control"
@@ -193,7 +189,7 @@ display:
     dc_pin: GPIO8
     reset_pin: GPIO12
     rotation: 90
-    data_rate: 80MHz
+    data_rate: 62.5MHz
     update_interval: 10d # NEVER, screen is updated manually
     pages:
       - id: page_yeelight

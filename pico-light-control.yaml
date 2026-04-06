@@ -196,7 +196,7 @@ display:
     reset_pin: GPIO12
     rotation: 90
     data_rate: 62.5MHz
-    update_interval: 10d # NEVER, screen is updated manually
+    update_interval: never
     pages:
       - id: page_yeelight
         lambda: |-

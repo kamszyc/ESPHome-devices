@@ -42,12 +42,12 @@ void drawBrightnessPageInternal(Display& it, const char* sensorName, const char*
     drawPlusMinus(it, isMin, isMax);
 }
 
-void drawBrightnessPage(Display& it, const char* sensorName, bool enabled, float state) {
+void drawBrightnessPage(Display& it, const char* sensorName, float state) {
     drawCommon(it);
     if (id(alert_displayed)) {
         drawAlert(it);
     }
-    else if (!enabled) {
+    else if (std::isnan(state) || state <= 1) { // !enabled
         drawBrightnessPageInternal(it, sensorName, "OFF", true, false);
     }
     else {

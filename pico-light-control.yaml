@@ -200,22 +200,22 @@ display:
     pages:
       - id: page_yeelight
         lambda: |-
-          drawBrightnessPage(it, "Yeelight", id(yeelight).state, id(yeelight_brightness).state);
+          drawBrightnessPage(it, "Yeelight", id(yeelight_brightness).state);
       - id: page_lamp
         lambda: |-
-          drawBrightnessPage(it, "Lampka", id(lamp).state, id(lamp_brightness).state);
+          drawBrightnessPage(it, "Lampka", id(lamp_brightness).state);
       - id: page_yeelight_ambilight
         lambda: |-
-          drawBrightnessPage(it, "Ambilight", id(yeelight_ambilight).state, id(yeelight_ambilight_brightness).state);
+          drawBrightnessPage(it, "Ambilight", id(yeelight_ambilight_brightness).state);
       - id: page_wled
         lambda: |-
-          drawBrightnessPage(it, "WLED", id(wled).state, id(wled_brightness).state);
+          drawBrightnessPage(it, "WLED", id(wled_brightness).state);
       - id: page_room_light
         lambda: |-
-          drawBrightnessPage(it, "Pokój", id(room_light).state, id(room_light_brightness).state);
+          drawBrightnessPage(it, "Pokój", id(room_light_brightness).state);
       - id: page_display_brightness
         lambda: |-
-          drawBrightnessPage(it, "Jasność tutaj", id(backlight).remote_values.is_on(), id(backlight).remote_values.get_brightness() * 255);
+          drawBrightnessPage(it, "Jasność tutaj", id(backlight).remote_values.get_brightness() * 255);
     on_page_change:
       then:
         - component.update: my_display
@@ -394,26 +394,6 @@ binary_sensor:
     on_state:
       then:
         - component.update: my_display
-
-  - platform: homeassistant
-    id: lamp
-    entity_id: light.ikea_tradfri_lampka_swiatlo
-
-  - platform: homeassistant
-    id: yeelight
-    entity_id: light.yeelight_lamp15_0x1e4bf3ad
-
-  - platform: homeassistant
-    id: yeelight_ambilight
-    entity_id: light.yeelight_lamp15_0x1e4bf3ad_ambilight
-
-  - platform: homeassistant
-    id: wled
-    entity_id: light.wled
-
-  - platform: homeassistant
-    id: room_light
-    entity_id: light.salon_swiatla
 
 color:
   - id: my_red

@@ -16,12 +16,6 @@ void handle_joystick_updown(Direction direction) {
         else
             yeelight_control->trigger("yeelight_dim");
     }
-    else if (my_display->get_active_page() == page_lamp) {
-        if (direction == UP)
-            lamp_control->trigger("lamp_brighten");
-        else
-            lamp_control->trigger("lamp_dim");
-    }
     else if (my_display->get_active_page() == page_yeelight_ambilight) {
         if (direction == UP)
             yeelight_ambilight_control->trigger("yeelight_ambilight_brighten");

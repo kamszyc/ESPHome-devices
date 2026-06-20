@@ -57,13 +57,6 @@ event:
       - yeelight_dim
       - yeelight_brighten
 
-  - id: lamp_control
-    name: "Lamp control"
-    platform: template
-    event_types:
-      - lamp_dim
-      - lamp_brighten
-
   - id: yeelight_ambilight_control
     name: "Yeelight ambilight control"
     platform: template
@@ -201,9 +194,6 @@ display:
       - id: page_yeelight
         lambda: |-
           drawBrightnessPage(it, "Yeelight", id(yeelight_brightness).state);
-      - id: page_lamp
-        lambda: |-
-          drawBrightnessPage(it, "Lampka", id(lamp_brightness).state);
       - id: page_yeelight_ambilight
         lambda: |-
           drawBrightnessPage(it, "Ambilight", id(yeelight_ambilight_brightness).state);
@@ -460,19 +450,6 @@ sensor:
         - if:
             all:
               - display.is_displaying_page: page_yeelight
-              - light.is_on: backlight
-            then:
-              - component.update: my_display
-
-  - platform: homeassistant
-    id: lamp_brightness
-    entity_id: light.ikea_tradfri_lampka_swiatlo
-    attribute: brightness
-    on_value:
-      then:
-        - if:
-            all:
-              - display.is_displaying_page: page_lamp
               - light.is_on: backlight
             then:
               - component.update: my_display

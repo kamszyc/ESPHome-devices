@@ -49,10 +49,12 @@ binary_sensor:
       inverted: true
 
 remote_transmitter:
+  id: ir_tx
   pin: 7
   carrier_duty_percent: 50%
 
 remote_receiver:
+  id: ir_rx
   pin:
     number: 8
     inverted: true
@@ -62,6 +64,17 @@ remote_receiver:
   on_sony: 
     - lambda: |-
         ESP_LOGI("sony_ir", "Received Sony → data=0x%X, nbits=%u", x.data, x.nbits);
+
+infrared:
+  - platform: ir_rf_proxy
+    name: IR Proxy Transmitter
+    id: ir_proxy_tx
+    remote_transmitter_id: ir_tx
+
+  - platform: ir_rf_proxy
+    name: IR Proxy Receiver
+    id: ir_proxy_rx
+    remote_receiver_id: ir_rx
 
 button:
   - platform: template

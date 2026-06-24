@@ -64,6 +64,9 @@ remote_receiver:
   on_sony: 
     - lambda: |-
         ESP_LOGI("sony_ir", "Received Sony → data=0x%X, nbits=%u", x.data, x.nbits);
+  on_nec:
+    - lambda: |-
+        ESP_LOGI("nec_ir", "Received NEC → address=%u, command=%u, command_repeats=%u", x.address, x.command, x.command_repeats);
 
 infrared:
   - platform: ir_rf_proxy
